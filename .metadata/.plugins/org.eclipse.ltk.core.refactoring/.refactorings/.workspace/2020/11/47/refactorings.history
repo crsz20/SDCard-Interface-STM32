@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;BlinkingLED/drivers/Inc/stm32446xx&apos;" deleteContents="false" description="Delete resource &apos;BlinkingLED/drivers/Inc/stm32446xx&apos;" element1="/BlinkingLED/drivers/Inc/stm32446xx" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1605712535489"/>
+</session>
