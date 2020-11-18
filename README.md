@@ -12,9 +12,9 @@
 ## Hardware and Equipment:
 
 1. [STM32 Nucleo-FE446RE Micro-Controller Unit (MCU)](https://www.st.com/en/evaluation-tools/nucleo-f446re.html) - Equipped with the ARM Cortex M4 processor
-2. [Micro-SD card adapter from *Sparkfun Electronics*](https://www.sparkfun.com/products/12941)
+2. [SparkFun's Micro-SD Card Breakout*](https://www.sparkfun.com/products/544)
 
 ![STM32 Nucleo-FE446RE MCU](https://www.st.com/bin/ecommerce/api/image.PF262063.en.feature-description-include-personalized-no-cpn-medium.jpg)
 
-![SparkFun SD/MMC Card Breakout](https://cdn.sparkfun.com//assets/parts/9/8/7/2/12941-01.jpg)
+![SparkFun's Micro-SD Card Breakout](https://cdn.sparkfun.com//assets/parts/3/0/6/00544-01.jpg)
 
