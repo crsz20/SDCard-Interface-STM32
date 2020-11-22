@@ -1,9 +1,9 @@
 # SDCard-Interface-STM32
 ***
 ## Objective:
-- [ ] Find a way to operate the MCU in stand-alone mode (without a PC)
+- [ ] Implement SPI communications
 - [ ] Interface the micro-SD card with the MCU through I/O pins.
-- [ ] Store the output as an Excel sheet in the micro-SD card for data analysis.
+- [ ] Store the output as an Excel sheet or txt file in the micro-SD card for data analysis.
 
 ## Technologies:
 * General Purpose I/O
@@ -18,3 +18,6 @@
 
 ![SparkFun's Micro-SD Card Breakout](https://cdn.sparkfun.com//assets/parts/3/0/6/00544-01.jpg)
 
+## Future Considerations:
+* Replace SPI with SDIO protocol
+* Integrate MatLab for data analysis
