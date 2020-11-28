@@ -119,6 +119,10 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
 	uint32_t temp; //temp. register will at first hold the desired GPIO config setting, with the bits set at the desired register
 
+	//Enable the peripheral clock, so the user doesn't have to do so explicitly
+	GPIO_PeriClockControl(pGPIOHandle->pGPIOx, ENABLE);
+
+
 	// Mode
 	if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_ANALOG)
 	{
@@ -213,38 +217,38 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 void GPIO_DeInit(GPIO_RegDef_t *pGPIOx)
 {
 
-		if(pGPIOx == GPIOA)
-		{
-			GPIOA_REG_RESET();
-		}
-		else if (pGPIOx == GPIOB)
-		{
-			GPIOB_REG_RESET();
-		}
-		else if (pGPIOx == GPIOC)
-		{
-			GPIOC_REG_RESET();
-		}
-		else if (pGPIOx == GPIOD)
-		{
-			GPIOD_REG_RESET();
-		}
-		else if (pGPIOx == GPIOE)
-		{
-			GPIOE_REG_RESET();
-		}
-		else if (pGPIOx == GPIOF)
-		{
-			GPIOF_REG_RESET();
-		}
-		else if (pGPIOx == GPIOG)
-		{
-			GPIOG_REG_RESET();
-		}
-		else if (pGPIOx == GPIOH)
-		{
-			GPIOH_REG_RESET();
-		}
+	if(pGPIOx == GPIOA)
+	{
+		GPIOA_REG_RESET();
+	}
+	else if (pGPIOx == GPIOB)
+	{
+		GPIOB_REG_RESET();
+	}
+	else if (pGPIOx == GPIOC)
+	{
+		GPIOC_REG_RESET();
+	}
+	else if (pGPIOx == GPIOD)
+	{
+		GPIOD_REG_RESET();
+	}
+	else if (pGPIOx == GPIOE)
+	{
+		GPIOE_REG_RESET();
+	}
+	else if (pGPIOx == GPIOF)
+	{
+		GPIOF_REG_RESET();
+	}
+	else if (pGPIOx == GPIOG)
+	{
+		GPIOG_REG_RESET();
+	}
+	else if (pGPIOx == GPIOH)
+	{
+		GPIOH_REG_RESET();
+	}
 
 }
 

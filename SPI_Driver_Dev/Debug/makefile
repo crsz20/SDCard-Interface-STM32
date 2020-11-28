@@ -30,24 +30,24 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-BlinkingLED.elf \
+SPI_Driver_Dev.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-BlinkingLED.list \
+SPI_Driver_Dev.list \
 
 OBJCOPY_BIN += \
-BlinkingLED.bin \
+SPI_Driver_Dev.bin \
 
 
 # All Target
-all: BlinkingLED.elf secondary-outputs
+all: SPI_Driver_Dev.elf secondary-outputs
 
 # Tool invocations
-BlinkingLED.elf: $(OBJS) $(USER_OBJS) C:\Users\cris1\Desktop\Programming\STM32_Projects\DFR\SDCard-Interface-STM32\BlinkingLED\STM32F446RETX_FLASH.ld
-	arm-none-eabi-gcc -o "BlinkingLED.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\cris1\Desktop\Programming\STM32_Projects\DFR\SDCard-Interface-STM32\BlinkingLED\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BlinkingLED.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+SPI_Driver_Dev.elf: $(OBJS) $(USER_OBJS) C:\Users\cris1\Desktop\Programming\STM32_Projects\DFR\SDCard-Interface-STM32\SPI_Driver_Dev\STM32F446RETX_FLASH.ld
+	arm-none-eabi-gcc -o "SPI_Driver_Dev.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\cris1\Desktop\Programming\STM32_Projects\DFR\SDCard-Interface-STM32\SPI_Driver_Dev\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SPI_Driver_Dev.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -56,13 +56,13 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BlinkingLED.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BlinkingLED.list"
+SPI_Driver_Dev.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "SPI_Driver_Dev.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BlinkingLED.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "BlinkingLED.bin"
+SPI_Driver_Dev.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "SPI_Driver_Dev.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
