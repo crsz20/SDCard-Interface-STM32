@@ -28,7 +28,7 @@ void SPI2_GPIOInits(void)
 	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	SPIPins.GPIO_PinConfig.GPIO_PinAltFunMode = 5;
 	SPIPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
-	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;		//If driving another slave, it is best to activate the internal pull ups
 	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 
 
@@ -80,7 +80,17 @@ int main(void)
 	SPI2_Inits();
 
 	//Makes NSS signal internally high and avoid MODF error
-	SPI_SSIConfig(SPI2, ENABLE);
+	//SPI_SSIConfig(SPI2, ENABLE);
+
+
+
+	/*
+	 * If SSOE = 1, then NSS output is enabled
+	 * The NSS pin is automatically managed by the hardware
+	 * (i.e. SPE = 1, so NSS will be pulled to low & vice versa)
+	 */
+	SPI_SSOEConfig(SPI2, ENABLE);
+
 
 	//Enable SPI2 peripheral
 	SPI_PeripheralControl(SPI2, ENABLE);
@@ -89,12 +99,15 @@ int main(void)
 	char user_data[] = "Hello World!";
 	SPI_SendData(SPI2, (uint8_t*) user_data, strlen(user_data));
 
+
+
+	//Confirm that SPI is not busy
+	while( SPI_GetFlagStatus(SPI2, SPI_BUSY_FLAG) );
+
 	//Disable SPI2 peripheral
 	SPI_PeripheralControl(SPI2, DISABLE);
 
 
-
-	while (1);
 
 	return 0;
 }
