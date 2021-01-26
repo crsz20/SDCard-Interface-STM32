@@ -1,3 +1,0 @@
-main.c:23:6:SPI2_GPIOInits	24	static
-main.c:56:6:SPI2_Inits	40	static
-main.c:73:5:main	32	static
