@@ -1,13 +1,16 @@
 # SDCard-Interface-STM32
 ***
 ## Objective:
-- [ ] Implement SDIO communications
+- [x] Implement SDIO communications
 - [ ] Interface the micro-SD card with the MCU for storage capabilities.
 - [ ] Store the output as an Excel sheet or txt file in the micro-SD card for data analysis.
+- [ ] Provide LED light indication for card detection and file completion
 
 ## Technologies:
 * General Purpose I/O (GPIO)
-* SDIO communication protocol
+* 4-bit SDIO communication protocol
+* HAL Drivers
+* [File Handling Library by Controllers Tech](https://controllerstech.com/interface-sd-card-with-sdio-in-stm32/)
 
 ## Hardware and Equipment:
 
@@ -17,6 +20,15 @@
 ![STM32 Nucleo-FE446RE MCU](https://www.st.com/bin/ecommerce/api/image.PF262063.en.feature-description-include-personalized-no-cpn-medium.jpg)
 
 ![Adafruit's Micro-SD Card Breakout](https://cdn-shop.adafruit.com/970x728/4682-04.jpg)
+
+## Pinout
+* PC8 ---> DAT0
+* PC9 ---> DAT1
+* PC10 --> DAT2
+* PC11 --> CD / DAT3
+* PC12 --> CLK
+* PD2 ---> CMD
+
 
 ## Future Considerations:
 * Integrate MatLab for data analysis
