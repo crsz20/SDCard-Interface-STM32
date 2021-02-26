@@ -1,10 +1,14 @@
 # SDCard-Interface-STM32
+An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard (accelerometer, gyroscope, and so on).
 ***
 ## Objective:
 - [x] Implement SDIO communications
-- [ ] Interface the micro-SD card with the MCU for storage capabilities.
-- [ ] Store the output as an Excel sheet or txt file in the micro-SD card for data analysis.
+- [x] Interface the micro-SD card with the MCU for storage capabilities.
 - [ ] Provide LED light indication for card detection and file completion
+- [ ] Condense the program to a callable function
+- [ ] Store the output as a CSV file
+- [ ] Build a report generator with Excel and/or MatLab
+
 
 ## Technologies:
 * General Purpose I/O (GPIO)
@@ -28,7 +32,3 @@
 * PC11 --> CD / DAT3
 * PC12 --> CLK
 * PD2 ---> CMD
-
-
-## Future Considerations:
-* Integrate MatLab for data analysis
