@@ -42,7 +42,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 SD_HandleTypeDef hsd;
-
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -60,7 +59,6 @@ static void MX_SDIO_SD_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 char buffer[100];
 int indx = 0;
 /* USER CODE END 0 */
