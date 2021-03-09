@@ -62,6 +62,8 @@ static void MX_SDIO_SD_Init(void);
 /* USER CODE BEGIN 0 */
 char buffer[100];
 int indx = 0;
+
+
 /* USER CODE END 0 */
 
 /**
@@ -104,9 +106,15 @@ int main(void)
     /* USER CODE BEGIN 2 */
     Mount_SD("/");
     Format_SD();
-    Create_File("FILE1.TXT");
-    Create_File("FILE2.TXT");
+//    Create_File("FILE1.TXT");
+//    Create_File("FILE2.TXT");
+    Create_File("CSV_TEST.CSV");
+
+    sprintf(buffer, "Device, Data, Time\n\n");
+    Update_File("CSV_TEST.CSV", buffer);
+
     Unmount_SD("/");
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -116,11 +124,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//	Mount_SD("/");
+//	sprintf(buffer, "Hello ---> %d\n", indx);
+//	Update_File("FILE1.TXT", buffer);
+//	sprintf(buffer, "world ---> %d\n", indx);
+//	Update_File("FILE2.TXT", buffer);
+//	Unmount_SD("/");
+
 	Mount_SD("/");
-	sprintf(buffer, "Hello ---> %d\n", indx);
-	Update_File("FILE1.TXT", buffer);
-	sprintf(buffer, "world ---> %d\n", indx);
-	Update_File("FILE2.TXT", buffer);
+	sprintf(buffer, "Device%d, %d m/s, %d seconds\n", indx, indx, indx);
+	Update_File("CSV_TEST.CSV", buffer);
 	Unmount_SD("/");
 
 	indx++;
