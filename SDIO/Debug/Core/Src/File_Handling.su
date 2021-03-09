@@ -1,0 +1,12 @@
+File_Handling.c:32:6:Send_Uart	16	static
+File_Handling.c:47:6:Mount_SD	16	static
+File_Handling.c:54:6:Unmount_SD	16	static
+File_Handling.c:62:9:Scan_SD	80	static
+File_Handling.c:104:9:Format_SD	64	static
+File_Handling.c:137:9:Write_File	40	static
+File_Handling.c:196:9:Read_File	40	static
+File_Handling.c:263:9:Create_File	40	static
+File_Handling.c:312:9:Update_File	40	static
+File_Handling.c:376:9:Remove_File	32	static
+File_Handling.c:411:9:Create_Dir	24	static
+File_Handling.c:431:6:Check_SD_Space	24	static
