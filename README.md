@@ -1,5 +1,5 @@
 # SDCard-Interface-STM32
-An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard (accelerometer, gyroscope, and so on).
+An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard. A project for UTD's Dallas Formula Racing.
 ***
 ## Objective:
 - [x] Implement SDIO communications
@@ -32,3 +32,48 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 * PC11 --> CD / DAT3
 * PC12 --> CLK
 * PD2 ---> CMD
+***
+
+## Expected Input
+<details>
+  <summary>CAN Bus</summary>
+  <p>- RPM <br>
+    - TPS (Throttle Position Sensor) <br>
+    - Fuel Open Time <br>
+    - Ignition Angle <br>
+    - Barometer <br>
+    - Map (Manifold Absolute Pressure) <br>
+    - Radiator Air Temp <br>
+    - Radiator Coolant Temp <br>
+    - AFR (Air Fuel Ratio) <br>
+    - Oil Pressure <br>
+    - Mass Air Flow Sensor <br>
+    - Wheel Speed <br>
+    - Battery Voltage
+   </p>
+</details>
+<details>
+  <summary>GPS</summary>
+  <p>- Second, minute, hour, day, month, year <br>
+    - Speed <br>
+    - Latitude <br>
+    - Longitude <br>
+    - Ellipsoidal Height <br>
+    - Sea Level Height
+   </p>
+</details>
+<details>
+  <summary>Analog-to-Digital Converter (ADC)</summary>
+  <p>- Damper Sensing<br>
+    - Steer Sensing <br>
+    - Brake Sensing
+   </p>
+</details>
+<details>
+  <summary>Accelerometer & Gyroscope</summary>
+  <p> - X, Y, & Z <br>
+    - Roll <br>
+    - Pitch <br>
+    - Yaw
+  </p>
+</details>
