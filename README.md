@@ -23,7 +23,7 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 
 ![STM32 Nucleo-FE446RE MCU](https://www.st.com/bin/ecommerce/api/image.PF262063.en.feature-description-include-personalized-no-cpn-medium.jpg)
 
-![Adafruit's Micro-SD Card Breakout](https://cdn-learn.adafruit.com/guides/images/000/003/056/medium640/4682-04.jpg)
+<img src="https://cdn-learn.adafruit.com/guides/images/000/003/056/medium640/4682-04.jpg" alt="Adafruit's Micro-SD Card Breakout" width="400">
 
 ## Pinout
 * PC8 ---> DAT0
