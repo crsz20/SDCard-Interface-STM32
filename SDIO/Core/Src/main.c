@@ -227,10 +227,10 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART2_UART_Init();
-  MX_SDIO_SD_Init();
-  MX_FATFS_Init();
+	MX_GPIO_Init();
+	MX_USART2_UART_Init();
+	MX_SDIO_SD_Init();
+	MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
   /* Initialize all configured peripherals */
     MX_GPIO_Init();
@@ -239,10 +239,31 @@ int main(void)
     MX_FATFS_Init();
     /* USER CODE BEGIN 2 */
 
-    Mount_SD("/");
-    char FileName[] = "CSV_TEST.CSV";
-    Create_File(FileName);
+    //Create new file with a GPS naming convention
+	second = 53;
+	minute = 33;
+	hour = 14;
+	day = 24;
+	month = 3;
+	year = 2021;
+	char dayS[12], monthS[12], yearS[12], hourS[12], minuteS[12], secondS[12];
+	sprintf(dayS, "%d", day);
+	sprintf(monthS, "%d", month);
+	sprintf(yearS, "%d", year);
+	sprintf(hourS, "%d", hour);
+	sprintf(minuteS, "%d", minute);
+	sprintf(secondS, "%d", second);
+	int lenF = strlen("DFR_")+strlen(dayS)+strlen("-")+strlen(monthS)+strlen("-")+strlen(yearS)+strlen("_")+strlen(secondS)+strlen("-")+strlen(minuteS)+strlen("-")+strlen(hourS)+strlen(".csv")+1;
+	char FileName[lenF];
+	snprintf(FileName,lenF,"DFR_%s-%s-%s_%s-%s-%s.CSV", dayS, monthS, yearS, secondS, minuteS, hourS);
+	//sprintf(FileName,"DFR_%d-%d-%d_%d-%d-%d.CSV", day, month, year, second, minute, hour);
+
+	Mount_SD("/");
+	Format_SD();
+	Create_File(FileName);
 	Unmount_SD("/");
+
+
     /*------------------------------Create header----------------------------*/
 	Mount_SD("/");
 
@@ -295,52 +316,52 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1)
+	{
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	Mount_SD("/");
+		Mount_SD("/");
 
 
 
-	sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
-	Update_File(FileName, buffer);
-	sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
-	Update_File(FileName, buffer);
-	sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
-	Update_File(FileName, buffer);
-	sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
-	Update_File(FileName, buffer);
-	sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
-	Update_File(FileName, buffer);
+		sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
+		Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
+		Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
+		Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
+		Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
+		Update_File(FileName, buffer);
 
-	sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
-	Update_File(FileName, buffer);
-	sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
-	Update_File(FileName, buffer);
+		sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
+		Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
+		Update_File(FileName, buffer);
 
-	sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
-	Update_File(FileName, buffer);
+		sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
+		Update_File(FileName, buffer);
 
-	sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
-	Update_File(FileName, buffer);
+		sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
+		Update_File(FileName, buffer);
 
-	sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
-	Update_File(FileName, buffer);
+		sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
+		Update_File(FileName, buffer);
 
-	sprintf(buffer, "\n\n");
-	Update_File(FileName, buffer);
-
-
-
-	Unmount_SD("/");
+		sprintf(buffer, "\n\n");
+		Update_File(FileName, buffer);
 
 
-	indx++;
 
-	HAL_Delay(2000);
-  }
+		Unmount_SD("/");
+
+
+		indx++;
+
+		HAL_Delay(2000);
+	}
   /* USER CODE END 3 */
 }
 
