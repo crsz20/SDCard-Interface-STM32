@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "File_Handling.h"
+#include "stdio.h"
+#include "stdlib.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,13 +57,145 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SDIO_SD_Init(void);
 /* USER CODE BEGIN PFP */
+//CAN_TxHeaderTypeDef TxHeader1;
+//CAN_RxHeaderTypeDef RxHeader1;
+//CAN_TxHeaderTypeDef TxHeader2;
+//CAN_RxHeaderTypeDef RxHeader2;
+//CAN_FilterTypeDef canFilter0;
 
+uint8_t TxMessage[8];
+uint8_t RxMessage[8];
+uint32_t TxMailbox;
+
+// Debugging
+short enablePrintf = 1;
+short enableTimers = 0;
+short enableTimerPrints = 1;
+short magnetometerPrints = 0;
+short accelerometerPrints = 1;
+short angularPrints = 0;
+// Driver config
+short enableDisplay = 0;
+short enableWriteSD = 0;
+short enableDiagnosticSD = 0;
+short startupAnimation = 0; // A nice startup animation, if it's ever implemented.
+// short dynamicBrightness = 0; // 0 is Off, 1 is On. Battery voltage-based brightness.
+short dispBrightness[2] = {0x09,0x09}; // Startup Display Brightness 8-7SD || Gear+LEDs
+short displayState[2] = {0,0}; // Startup Display Configuration
+
+// CAN Bus variable declarations
+unsigned int RPM = 0;
+double TPS = 0; // %
+double fuelOpenTime = 0; // ms
+double ignitionAngle = 0; // Degrees
+double barometer = 0; // PSI
+double MAP = 0; // PSI
+double lambda = 0; // ECU mapped Lambda #1 (A/F R) (DO NOT PRINT)
+unsigned int pressureType = 0;
+double AnIn1 = 0; // Radiator Air Temp (Post) (F/C)
+double AnIn2 = 0; // Radiator Air Temp (Pre) (F/C)
+double AnIn3 = 0; // Lambda #1 (A/F R)
+double AnIn4 = 0; // Lambda #2 (A/F R)
+double AnIn5 = 0; // Radiator Coolant Temp (Pre)
+double AnIn6 = 0; // Radiator Coolant Temp (Post)
+double AnIn7 = 0; // Oil Pressure (PSI - Display, kPa - SD Card)
+double AnIn8 = 0; // MAF Sensor (?)
+double freq1 = 0; // Wheel Speed Sensor (FR) (mph)
+double freq2 = 0; // Wheel Speed Sensor (FL) (mph)
+double freq3 = 0; // Wheel Speed Sensor (RR) (mph)
+double freq4 = 0; // Wheel Speed Sensor (RL) (mph)
+double batteryVoltage = 0;
+double airTemp = 0; // (F)
+double coolantTemp = 0; // Coolant temp at Engine
+unsigned int tempType = 0;
+double AnInT5 = 0; // (DO NOT PRINT SD)
+double AnInT7 = 0; // (DO NOT PRINT SD)
+int versionMajor = 0;
+int versionMinor = 0;
+int versionBuild = 0;
+int TBD = 0;
+
+// GPS variable declarations
+int day, month, year, hour, minute, second, statFix, gSpeed;
+float latitude, longitude, height_Ellipsoid, height_SeaLvl;
+int uniqueID[6];
+
+// ADC1 variable declarations
+int damperT_Sense_FL = 0; // ADC1_IN0
+int damperT_Sense_FR = 0; // ADC1_IN1
+int damperT_Sense_RL = 0; // ADC1_IN4
+int damperT_Sense_RR = 0; // ADC1_IN6
+
+// ADC2 variable declarations
+int steeringA_Sense = 0; // ADC2_IN7
+int brakeP_Sense1 = 0; // ADC2_IN8
+int brakeP_Sense2 = 0; // ADC2_IN9
+int radiatorWaterTemp1 = 0; // ADC2_IN10
+int radiatorWaterTemp2 = 0; // ADC2_IN11
+
+// Accelerometer variable declarations
+uint8_t receive;
+uint8_t receiveArr[12];
+int16_t pitchS = 0;
+int16_t rollS = 0;
+int16_t yawS = 0;
+int16_t x_AccelS = 0;
+int16_t y_AccelS = 0;
+int16_t z_AccelS = 0;
+
+double x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS; // Print these to SD Card
+
+// ADC DMA
+uint16_t DMA_Store_ADC1[4];
+uint16_t DMA_Store_ADC2[5];
+
+// Display variable declarations
+double gearing[6] = {2.883,2.062, 1.647, 1.421, 1.272, 1.173};
+double finalDrive = 4.55;
+double tireRadius = 10; // Inches
+double computedSpeed;
+double wheelSpeed = 0;
+double lapTime = 0;
+double oilPressure = 0;
+
+unsigned short gear;
+
+int dispCommFail = 0; // CAN, I2C, SPI, or UART Failure
+int dispMCUFail = 0; // In the event of failure, I don't even know how this would be triggered. I sure hope it never does though.
+
+short dataMark = 0;
+uint8_t current7SegL[4] = {0,0,0,0};
+uint8_t current7SegR[4] = {0,0,0,0};
+uint8_t currentRPMBar = 0;
+uint8_t enablePins[2] = {7,6}; // Left || Right
+uint8_t digitAddresses[8] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; // Leftmost to Rightmost
+unsigned short dispUpdateDelay = 10; // milliseconds.
+unsigned short launchDisplay = 0; // Waits for first CAN message so meaningful values can be sent to display.
+
+const int dispRPM[2] = {10000, 12500}; // RPM Indicator: Warning Light, Max (RPM)
+const int dispWaterTemp[2] = {32, 230}; // Temperature Warning Indicators: Low, High (Farenheit)
+const int dispOilPressure[2] = {0, 90}; // Oil Pressure Indicator: Low, High (PSI)
+
+uint8_t tempVar1;
+
+void CAN1_TX(void);
+
+//void initializeDisplays();
+//void updateDisplaysComplex();
+//void updateDisplaysFlush();
+//void initializeLSM9DS1();
+//void readLSM9DS1();
+//void ambientCalcs();
+//void testDisplay();
+
+// SD Card
+char buffer[100];
+int indx = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char buffer[100];
-int indx = 0;
+
 
 
 /* USER CODE END 0 */
@@ -104,16 +238,58 @@ int main(void)
     MX_SDIO_SD_Init();
     MX_FATFS_Init();
     /* USER CODE BEGIN 2 */
+
     Mount_SD("/");
-    Format_SD();
-//    Create_File("FILE1.TXT");
-//    Create_File("FILE2.TXT");
-    Create_File("CSV_TEST.CSV");
+    char FileName[] = "CSV_TEST.CSV";
+    Create_File(FileName);
+	Unmount_SD("/");
+    /*------------------------------Create header----------------------------*/
+	Mount_SD("/");
 
-    sprintf(buffer, "Device, Data, Time\n\n");
-    Update_File("CSV_TEST.CSV", buffer);
+	//CAN Bus
+	sprintf(buffer, "Time, RPM, TPS (%%), Fuel Open Time (ms), Ignition Angle (Degrees),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Barometer (PSI), MAP (PSI), Pressure Type,");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Pre Radiator Air Temp (C), Post Radiator Air Temp (C),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Labmda #1 (A/F R), Lambda #2 (A/F R),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Pre Radiator Coolant Temp (C), Post Radiator Coolant Temp (C),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Oil Pressure (PSI), Mass Air Flow Sensor (kg/s),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "FR Wheel Speed (mph), FL Wheel Speed (mph),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "RR Wheel Speed (mph), RL Wheel Speed (mph),");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Battery Voltage (V), Air Temp (C), Coolant Temp (C),");
+	Update_File(FileName, buffer);
 
-    Unmount_SD("/");
+	//GPS
+	sprintf(buffer, "Day, Month, Year, Hour, Minute, Second, gSpeed,");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "Latitude, Longitude, Height Ellipsoid, Height Sea Level,");
+	Update_File(FileName, buffer);
+
+	//ADC1
+	sprintf(buffer, "FL Damper Sensor, FR Damper Sensor,");
+	Update_File(FileName, buffer);
+	sprintf(buffer, "RL Damper Sensor, RR Damper Sensor,");
+	Update_File(FileName, buffer);
+
+	//ADC2
+	sprintf(buffer, "Steering Sensor, Brake Sensor #1, Brake Sensor #2,");
+	Update_File(FileName, buffer);
+
+	//Ask about Unused #1 and #2
+
+	//Accelerometer & Gyroscope
+	sprintf(buffer, "X, Y, Z, Roll, Pitch, Yaw\n\n");
+	Update_File(FileName, buffer);
+
+
+	Unmount_SD("/");
 
   /* USER CODE END 2 */
 
@@ -124,17 +300,42 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	Mount_SD("/");
-//	sprintf(buffer, "Hello ---> %d\n", indx);
-//	Update_File("FILE1.TXT", buffer);
-//	sprintf(buffer, "world ---> %d\n", indx);
-//	Update_File("FILE2.TXT", buffer);
-//	Unmount_SD("/");
-
 	Mount_SD("/");
-	sprintf(buffer, "Device%d, %d m/s, %d seconds\n", indx, indx, indx);
-	Update_File("CSV_TEST.CSV", buffer);
+
+
+
+	sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
+	Update_File(FileName, buffer);
+	sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
+	Update_File(FileName, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
+	Update_File(FileName, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
+	Update_File(FileName, buffer);
+	sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
+	Update_File(FileName, buffer);
+
+	sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
+	Update_File(FileName, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
+	Update_File(FileName, buffer);
+
+	sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
+	Update_File(FileName, buffer);
+
+	sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
+	Update_File(FileName, buffer);
+
+	sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
+	Update_File(FileName, buffer);
+
+	sprintf(buffer, "\n\n");
+	Update_File(FileName, buffer);
+
+
+
 	Unmount_SD("/");
+
 
 	indx++;
 
