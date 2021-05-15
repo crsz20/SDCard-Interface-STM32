@@ -26,6 +26,7 @@
 #include "File_Handling.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -187,6 +188,8 @@ void CAN1_TX(void);
 //void readLSM9DS1();
 //void ambientCalcs();
 //void testDisplay();
+void csvHeader(char* FileName, int lenF);
+void csvUpdate(char* FileName, int lenF);
 
 // SD Card
 char buffer[100];
@@ -206,33 +209,33 @@ int indx = 0;
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+	/* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	/* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* USER CODE BEGIN Init */
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	/* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	/* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
+	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_USART2_UART_Init();
 	MX_SDIO_SD_Init();
 	MX_FATFS_Init();
-  /* USER CODE BEGIN 2 */
-  /* Initialize all configured peripherals */
+	/* USER CODE BEGIN 2 */
+	/* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART2_UART_Init();
     MX_SDIO_SD_Init();
@@ -264,105 +267,24 @@ int main(void)
 	Unmount_SD("/");
 
 
-    /*------------------------------Create header----------------------------*/
-	Mount_SD("/");
 
-	//CAN Bus
-	sprintf(buffer, "Time, RPM, TPS (%%), Fuel Open Time (ms), Ignition Angle (Degrees),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Barometer (PSI), MAP (PSI), Pressure Type,");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Pre Radiator Air Temp (C), Post Radiator Air Temp (C),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Labmda #1 (A/F R), Lambda #2 (A/F R),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Pre Radiator Coolant Temp (C), Post Radiator Coolant Temp (C),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Oil Pressure (PSI), Mass Air Flow Sensor (kg/s),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "FR Wheel Speed (mph), FL Wheel Speed (mph),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "RR Wheel Speed (mph), RL Wheel Speed (mph),");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Battery Voltage (V), Air Temp (C), Coolant Temp (C),");
-	Update_File(FileName, buffer);
+	csvHeader(FileName, lenF);
 
-	//GPS
-	sprintf(buffer, "Day, Month, Year, Hour, Minute, Second, gSpeed,");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "Latitude, Longitude, Height Ellipsoid, Height Sea Level,");
-	Update_File(FileName, buffer);
+	/* USER CODE END 2 */
 
-	//ADC1
-	sprintf(buffer, "FL Damper Sensor, FR Damper Sensor,");
-	Update_File(FileName, buffer);
-	sprintf(buffer, "RL Damper Sensor, RR Damper Sensor,");
-	Update_File(FileName, buffer);
-
-	//ADC2
-	sprintf(buffer, "Steering Sensor, Brake Sensor #1, Brake Sensor #2,");
-	Update_File(FileName, buffer);
-
-	//Ask about Unused #1 and #2
-
-	//Accelerometer & Gyroscope
-	sprintf(buffer, "X, Y, Z, Roll, Pitch, Yaw\n\n");
-	Update_File(FileName, buffer);
-
-
-	Unmount_SD("/");
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-    /* USER CODE END WHILE */
+		/* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
-		Mount_SD("/");
-
-
-
-		sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
-		Update_File(FileName, buffer);
-		sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
-		Update_File(FileName, buffer);
-		sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
-		Update_File(FileName, buffer);
-		sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
-		Update_File(FileName, buffer);
-		sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
-		Update_File(FileName, buffer);
-
-		sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
-		Update_File(FileName, buffer);
-		sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
-		Update_File(FileName, buffer);
-
-		sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
-		Update_File(FileName, buffer);
-
-		sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
-		Update_File(FileName, buffer);
-
-		sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
-		Update_File(FileName, buffer);
-
-		sprintf(buffer, "\n\n");
-		Update_File(FileName, buffer);
-
-
-
-		Unmount_SD("/");
-
-
+		/* USER CODE BEGIN 3 */
+		csvUpdate(FileName, lenF);
 		indx++;
 
 		HAL_Delay(2000);
 	}
-  /* USER CODE END 3 */
+	/* USER CODE END 3 */
 }
 
 /**
@@ -514,6 +436,101 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void csvHeader(char* FileName, int lenF) {
+
+	char name[lenF];
+	strcpy(name, FileName);
+
+	Mount_SD("/");
+
+	//CAN Bus
+	sprintf(buffer, "Time, RPM, TPS (%%), Fuel Open Time (ms), Ignition Angle (Degrees),");
+	Update_File(name, buffer);
+	sprintf(buffer, "Barometer (PSI), MAP (PSI), Pressure Type,");
+	Update_File(name, buffer);
+	sprintf(buffer, "Pre Radiator Air Temp (C), Post Radiator Air Temp (C),");
+	Update_File(name, buffer);
+	sprintf(buffer, "Labmda #1 (A/F R), Lambda #2 (A/F R),");
+	Update_File(name, buffer);
+	sprintf(buffer, "Pre Radiator Coolant Temp (C), Post Radiator Coolant Temp (C),");
+	Update_File(name, buffer);
+	sprintf(buffer, "Oil Pressure (PSI), Mass Air Flow Sensor (kg/s),");
+	Update_File(name, buffer);
+	sprintf(buffer, "FR Wheel Speed (mph), FL Wheel Speed (mph),");
+	Update_File(name, buffer);
+	sprintf(buffer, "RR Wheel Speed (mph), RL Wheel Speed (mph),");
+	Update_File(name, buffer);
+	sprintf(buffer, "Battery Voltage (V), Air Temp (C), Coolant Temp (C),");
+	Update_File(name, buffer);
+
+	//GPS
+	sprintf(buffer, "Day, Month, Year, Hour, Minute, Second, gSpeed,");
+	Update_File(name, buffer);
+	sprintf(buffer, "Latitude, Longitude, Height Ellipsoid, Height Sea Level,");
+	Update_File(name, buffer);
+
+	//ADC1
+	sprintf(buffer, "FL Damper Sensor, FR Damper Sensor,");
+	Update_File(name, buffer);
+	sprintf(buffer, "RL Damper Sensor, RR Damper Sensor,");
+	Update_File(name, buffer);
+
+	//ADC2
+	sprintf(buffer, "Steering Sensor, Brake Sensor #1, Brake Sensor #2,");
+	Update_File(name, buffer);
+
+	//Ask about Unused #1 and #2
+
+	//Accelerometer & Gyroscope
+	sprintf(buffer, "X, Y, Z, Roll, Pitch, Yaw\n\n");
+	Update_File(name, buffer);
+
+
+	Unmount_SD("/");
+}
+
+void csvUpdate(char* FileName, int lenF) {
+
+	char name[lenF];
+	strcpy(name, FileName);
+
+	Mount_SD("/");
+
+
+
+	sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
+	Update_File(name, buffer);
+	sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
+	Update_File(name, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
+	Update_File(name, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
+	Update_File(name, buffer);
+	sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
+	Update_File(name, buffer);
+
+	sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
+	Update_File(name, buffer);
+	sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
+	Update_File(name, buffer);
+
+	sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
+	Update_File(name, buffer);
+
+	sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
+	Update_File(name, buffer);
+
+	sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
+	Update_File(name, buffer);
+
+	sprintf(buffer, "\n\n");
+	Update_File(name, buffer);
+
+
+
+	Unmount_SD("/");
+}
 
 /* USER CODE END 4 */
 
