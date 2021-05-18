@@ -31,7 +31,6 @@ Middlewares/Third_Party/FatFs/src/diskio.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../FATFS/Target/bsp_driver_sd.h
 
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
@@ -99,7 +98,5 @@ Middlewares/Third_Party/FatFs/src/diskio.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h:
-
-../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 
 ../FATFS/Target/bsp_driver_sd.h:
