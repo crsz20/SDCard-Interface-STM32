@@ -10,7 +10,7 @@
 #include <File_Handling.h>
 #include "stm32f4xx_hal.h"
 #include "stdio.h"		//printf debugging
-
+#include "main.h"
 
 //If fresult == FR_INVALID_NAME, make sure that the macro _USE_LFN is set to 2 in FATFS > Target > ffconf.h
 
@@ -30,13 +30,7 @@ uint32_t total, free_space;
 
 
 
-int _write(int file, char *ptr, int len)
-{
-	for(int i=0; i<len; i++)
-		ITM_SendChar((*ptr++));
 
-	return len;
-}
 
 
 void Mount_SD (const TCHAR* path)

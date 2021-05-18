@@ -194,6 +194,14 @@ int indx = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
+int _write(int file, char *ptr, int len)
+{
+	for(int i=0; i<len; i++)
+		ITM_SendChar((*ptr++));
+
+	return len;
+}
+
 /* USER CODE BEGIN 0 */
 
 
@@ -255,7 +263,6 @@ int main(void)
 	int lenF = strlen("DFR_")+strlen(dayS)+strlen("-")+strlen(monthS)+strlen("-")+strlen(yearS)+strlen("_")+strlen(secondS)+strlen("-")+strlen(minuteS)+strlen("-")+strlen(hourS)+strlen(".csv")+1;
 	char FileName[lenF];
 	snprintf(FileName,lenF,"DFR_%s-%s-%s_%s-%s-%s.CSV", dayS, monthS, yearS, secondS, minuteS, hourS);
-	//sprintf(FileName,"DFR_%d-%d-%d_%d-%d-%d.CSV", day, month, year, second, minute, hour);
 
 	Mount_SD("/");
 	Format_SD();

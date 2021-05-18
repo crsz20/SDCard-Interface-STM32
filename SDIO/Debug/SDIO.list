@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000301dc  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000139a5  00000000  00000000  0003020c  2**0
+ 12 .debug_info   0001398f  00000000  00000000  0003020c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 00002ab1  00000000  00000000  00043bb1  2**0
+ 13 .debug_abbrev 00002ae0  00000000  00000000  00043b9b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 00000ca8  00000000  00000000  00046668  2**3
+ 14 .debug_aranges 00000ca8  00000000  00000000  00046680  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 00000b70  00000000  00000000  00047310  2**3
+ 15 .debug_ranges 00000b70  00000000  00000000  00047328  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  000245fd  00000000  00000000  00047e80  2**0
+ 16 .debug_macro  000245fd  00000000  00000000  00047e98  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   0000d490  00000000  00000000  0006c47d  2**0
+ 17 .debug_line   0000d489  00000000  00000000  0006c495  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    000cde69  00000000  00000000  0007990d  2**0
+ 18 .debug_str    000cde69  00000000  00000000  0007991e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  00147776  2**0
+ 19 .comment      0000007b  00000000  00000000  00147787  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004294  00000000  00000000  001477f4  2**2
+ 20 .debug_frame  00004294  00000000  00000000  00147804  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1398,707 +1398,709 @@ WCHAR ff_wtoupper(WCHAR chr)
  8001006:	f85d 7b04 	ldr.w	r7, [sp], #4
  800100a:	4770      	bx	lr
 
-0800100c <ITM_SendChar>:
-           \li Is blocking when a debugger is connected, but the previous character sent has not been transmitted.
-  \param [in]     ch  Character to transmit.
-  \returns            Character to transmit.
- */
-__STATIC_INLINE uint32_t ITM_SendChar (uint32_t ch)
-{
- 800100c:	b480      	push	{r7}
- 800100e:	b083      	sub	sp, #12
- 8001010:	af00      	add	r7, sp, #0
- 8001012:	6078      	str	r0, [r7, #4]
-  if (((ITM->TCR & ITM_TCR_ITMENA_Msk) != 0UL) &&      /* ITM enabled */
- 8001014:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
- 8001018:	f8d3 3e80 	ldr.w	r3, [r3, #3712]	; 0xe80
- 800101c:	f003 0301 	and.w	r3, r3, #1
- 8001020:	2b00      	cmp	r3, #0
- 8001022:	d013      	beq.n	800104c <ITM_SendChar+0x40>
-      ((ITM->TER & 1UL               ) != 0UL)   )     /* ITM Port #0 enabled */
- 8001024:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
- 8001028:	f8d3 3e00 	ldr.w	r3, [r3, #3584]	; 0xe00
- 800102c:	f003 0301 	and.w	r3, r3, #1
-  if (((ITM->TCR & ITM_TCR_ITMENA_Msk) != 0UL) &&      /* ITM enabled */
- 8001030:	2b00      	cmp	r3, #0
- 8001032:	d00b      	beq.n	800104c <ITM_SendChar+0x40>
-  {
-    while (ITM->PORT[0U].u32 == 0UL)
- 8001034:	e000      	b.n	8001038 <ITM_SendChar+0x2c>
-    {
-      __NOP();
- 8001036:	bf00      	nop
-    while (ITM->PORT[0U].u32 == 0UL)
- 8001038:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
- 800103c:	681b      	ldr	r3, [r3, #0]
- 800103e:	2b00      	cmp	r3, #0
- 8001040:	d0f9      	beq.n	8001036 <ITM_SendChar+0x2a>
-    }
-    ITM->PORT[0U].u8 = (uint8_t)ch;
- 8001042:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
- 8001046:	687a      	ldr	r2, [r7, #4]
- 8001048:	b2d2      	uxtb	r2, r2
- 800104a:	701a      	strb	r2, [r3, #0]
-  }
-  return (ch);
- 800104c:	687b      	ldr	r3, [r7, #4]
-}
- 800104e:	4618      	mov	r0, r3
- 8001050:	370c      	adds	r7, #12
- 8001052:	46bd      	mov	sp, r7
- 8001054:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001058:	4770      	bx	lr
-
-0800105a <_write>:
-uint32_t total, free_space;
+0800100c <Mount_SD>:
 
 
-
-int _write(int file, char *ptr, int len)
-{
- 800105a:	b580      	push	{r7, lr}
- 800105c:	b086      	sub	sp, #24
- 800105e:	af00      	add	r7, sp, #0
- 8001060:	60f8      	str	r0, [r7, #12]
- 8001062:	60b9      	str	r1, [r7, #8]
- 8001064:	607a      	str	r2, [r7, #4]
-	for(int i=0; i<len; i++)
- 8001066:	2300      	movs	r3, #0
- 8001068:	617b      	str	r3, [r7, #20]
- 800106a:	e009      	b.n	8001080 <_write+0x26>
-		ITM_SendChar((*ptr++));
- 800106c:	68bb      	ldr	r3, [r7, #8]
- 800106e:	1c5a      	adds	r2, r3, #1
- 8001070:	60ba      	str	r2, [r7, #8]
- 8001072:	781b      	ldrb	r3, [r3, #0]
- 8001074:	4618      	mov	r0, r3
- 8001076:	f7ff ffc9 	bl	800100c <ITM_SendChar>
-	for(int i=0; i<len; i++)
- 800107a:	697b      	ldr	r3, [r7, #20]
- 800107c:	3301      	adds	r3, #1
- 800107e:	617b      	str	r3, [r7, #20]
- 8001080:	697a      	ldr	r2, [r7, #20]
- 8001082:	687b      	ldr	r3, [r7, #4]
- 8001084:	429a      	cmp	r2, r3
- 8001086:	dbf1      	blt.n	800106c <_write+0x12>
-
-	return len;
- 8001088:	687b      	ldr	r3, [r7, #4]
-}
- 800108a:	4618      	mov	r0, r3
- 800108c:	3718      	adds	r7, #24
- 800108e:	46bd      	mov	sp, r7
- 8001090:	bd80      	pop	{r7, pc}
-	...
-
-08001094 <Mount_SD>:
 
 
 void Mount_SD (const TCHAR* path)
 {
- 8001094:	b580      	push	{r7, lr}
- 8001096:	b082      	sub	sp, #8
- 8001098:	af00      	add	r7, sp, #0
- 800109a:	6078      	str	r0, [r7, #4]
+ 800100c:	b580      	push	{r7, lr}
+ 800100e:	b082      	sub	sp, #8
+ 8001010:	af00      	add	r7, sp, #0
+ 8001012:	6078      	str	r0, [r7, #4]
 	fresult = f_mount(&fs, path, 1);
- 800109c:	2201      	movs	r2, #1
- 800109e:	6879      	ldr	r1, [r7, #4]
- 80010a0:	480a      	ldr	r0, [pc, #40]	; (80010cc <Mount_SD+0x38>)
- 80010a2:	f007 f891 	bl	80081c8 <f_mount>
- 80010a6:	4603      	mov	r3, r0
- 80010a8:	461a      	mov	r2, r3
- 80010aa:	4b09      	ldr	r3, [pc, #36]	; (80010d0 <Mount_SD+0x3c>)
- 80010ac:	701a      	strb	r2, [r3, #0]
+ 8001014:	2201      	movs	r2, #1
+ 8001016:	6879      	ldr	r1, [r7, #4]
+ 8001018:	480a      	ldr	r0, [pc, #40]	; (8001044 <Mount_SD+0x38>)
+ 800101a:	f007 f8d5 	bl	80081c8 <f_mount>
+ 800101e:	4603      	mov	r3, r0
+ 8001020:	461a      	mov	r2, r3
+ 8001022:	4b09      	ldr	r3, [pc, #36]	; (8001048 <Mount_SD+0x3c>)
+ 8001024:	701a      	strb	r2, [r3, #0]
 	if (fresult != FR_OK) printf("ERROR!!! in mounting SD CARD...\n");
- 80010ae:	4b08      	ldr	r3, [pc, #32]	; (80010d0 <Mount_SD+0x3c>)
- 80010b0:	781b      	ldrb	r3, [r3, #0]
- 80010b2:	2b00      	cmp	r3, #0
- 80010b4:	d003      	beq.n	80010be <Mount_SD+0x2a>
- 80010b6:	4807      	ldr	r0, [pc, #28]	; (80010d4 <Mount_SD+0x40>)
- 80010b8:	f008 fd6c 	bl	8009b94 <puts>
+ 8001026:	4b08      	ldr	r3, [pc, #32]	; (8001048 <Mount_SD+0x3c>)
+ 8001028:	781b      	ldrb	r3, [r3, #0]
+ 800102a:	2b00      	cmp	r3, #0
+ 800102c:	d003      	beq.n	8001036 <Mount_SD+0x2a>
+ 800102e:	4807      	ldr	r0, [pc, #28]	; (800104c <Mount_SD+0x40>)
+ 8001030:	f008 fdb0 	bl	8009b94 <puts>
 	else printf("SD CARD mounted successfully...\n");
 }
- 80010bc:	e002      	b.n	80010c4 <Mount_SD+0x30>
+ 8001034:	e002      	b.n	800103c <Mount_SD+0x30>
 	else printf("SD CARD mounted successfully...\n");
- 80010be:	4806      	ldr	r0, [pc, #24]	; (80010d8 <Mount_SD+0x44>)
- 80010c0:	f008 fd68 	bl	8009b94 <puts>
+ 8001036:	4806      	ldr	r0, [pc, #24]	; (8001050 <Mount_SD+0x44>)
+ 8001038:	f008 fdac 	bl	8009b94 <puts>
 }
- 80010c4:	bf00      	nop
- 80010c6:	3708      	adds	r7, #8
- 80010c8:	46bd      	mov	sp, r7
- 80010ca:	bd80      	pop	{r7, pc}
- 80010cc:	20000424 	.word	0x20000424
- 80010d0:	20000668 	.word	0x20000668
- 80010d4:	0800bbb0 	.word	0x0800bbb0
- 80010d8:	0800bbd0 	.word	0x0800bbd0
+ 800103c:	bf00      	nop
+ 800103e:	3708      	adds	r7, #8
+ 8001040:	46bd      	mov	sp, r7
+ 8001042:	bd80      	pop	{r7, pc}
+ 8001044:	20000424 	.word	0x20000424
+ 8001048:	20000668 	.word	0x20000668
+ 800104c:	0800bbb0 	.word	0x0800bbb0
+ 8001050:	0800bbd0 	.word	0x0800bbd0
 
-080010dc <Unmount_SD>:
+08001054 <Unmount_SD>:
 
 void Unmount_SD (const TCHAR* path)
 {
- 80010dc:	b580      	push	{r7, lr}
- 80010de:	b082      	sub	sp, #8
- 80010e0:	af00      	add	r7, sp, #0
- 80010e2:	6078      	str	r0, [r7, #4]
+ 8001054:	b580      	push	{r7, lr}
+ 8001056:	b082      	sub	sp, #8
+ 8001058:	af00      	add	r7, sp, #0
+ 800105a:	6078      	str	r0, [r7, #4]
 	fresult = f_mount(NULL, path, 1);
- 80010e4:	2201      	movs	r2, #1
- 80010e6:	6879      	ldr	r1, [r7, #4]
- 80010e8:	2000      	movs	r0, #0
- 80010ea:	f007 f86d 	bl	80081c8 <f_mount>
- 80010ee:	4603      	mov	r3, r0
- 80010f0:	461a      	mov	r2, r3
- 80010f2:	4b08      	ldr	r3, [pc, #32]	; (8001114 <Unmount_SD+0x38>)
- 80010f4:	701a      	strb	r2, [r3, #0]
+ 800105c:	2201      	movs	r2, #1
+ 800105e:	6879      	ldr	r1, [r7, #4]
+ 8001060:	2000      	movs	r0, #0
+ 8001062:	f007 f8b1 	bl	80081c8 <f_mount>
+ 8001066:	4603      	mov	r3, r0
+ 8001068:	461a      	mov	r2, r3
+ 800106a:	4b08      	ldr	r3, [pc, #32]	; (800108c <Unmount_SD+0x38>)
+ 800106c:	701a      	strb	r2, [r3, #0]
 	if (fresult == FR_OK) printf("SD CARD UNMOUNTED successfully...\n\n");
- 80010f6:	4b07      	ldr	r3, [pc, #28]	; (8001114 <Unmount_SD+0x38>)
- 80010f8:	781b      	ldrb	r3, [r3, #0]
- 80010fa:	2b00      	cmp	r3, #0
- 80010fc:	d103      	bne.n	8001106 <Unmount_SD+0x2a>
- 80010fe:	4806      	ldr	r0, [pc, #24]	; (8001118 <Unmount_SD+0x3c>)
- 8001100:	f008 fd48 	bl	8009b94 <puts>
+ 800106e:	4b07      	ldr	r3, [pc, #28]	; (800108c <Unmount_SD+0x38>)
+ 8001070:	781b      	ldrb	r3, [r3, #0]
+ 8001072:	2b00      	cmp	r3, #0
+ 8001074:	d103      	bne.n	800107e <Unmount_SD+0x2a>
+ 8001076:	4806      	ldr	r0, [pc, #24]	; (8001090 <Unmount_SD+0x3c>)
+ 8001078:	f008 fd8c 	bl	8009b94 <puts>
 	else printf("ERROR!!! in UNMOUNTING SD CARD\n\n");
 }
- 8001104:	e002      	b.n	800110c <Unmount_SD+0x30>
+ 800107c:	e002      	b.n	8001084 <Unmount_SD+0x30>
 	else printf("ERROR!!! in UNMOUNTING SD CARD\n\n");
- 8001106:	4805      	ldr	r0, [pc, #20]	; (800111c <Unmount_SD+0x40>)
- 8001108:	f008 fd44 	bl	8009b94 <puts>
+ 800107e:	4805      	ldr	r0, [pc, #20]	; (8001094 <Unmount_SD+0x40>)
+ 8001080:	f008 fd88 	bl	8009b94 <puts>
 }
- 800110c:	bf00      	nop
- 800110e:	3708      	adds	r7, #8
- 8001110:	46bd      	mov	sp, r7
- 8001112:	bd80      	pop	{r7, pc}
- 8001114:	20000668 	.word	0x20000668
- 8001118:	0800bbf0 	.word	0x0800bbf0
- 800111c:	0800bc14 	.word	0x0800bc14
+ 8001084:	bf00      	nop
+ 8001086:	3708      	adds	r7, #8
+ 8001088:	46bd      	mov	sp, r7
+ 800108a:	bd80      	pop	{r7, pc}
+ 800108c:	20000668 	.word	0x20000668
+ 8001090:	0800bbf0 	.word	0x0800bbf0
+ 8001094:	0800bc14 	.word	0x0800bc14
 
-08001120 <Format_SD>:
+08001098 <Format_SD>:
     return fresult;
 }
 
 /* Only supports removing files from home directory */
 FRESULT Format_SD (void)
 {
- 8001120:	b580      	push	{r7, lr}
- 8001122:	b08e      	sub	sp, #56	; 0x38
- 8001124:	af00      	add	r7, sp, #0
+ 8001098:	b580      	push	{r7, lr}
+ 800109a:	b08e      	sub	sp, #56	; 0x38
+ 800109c:	af00      	add	r7, sp, #0
     DIR dir;
     char *path = malloc(20*sizeof (char));
- 8001126:	2014      	movs	r0, #20
- 8001128:	f007 ffa4 	bl	8009074 <malloc>
- 800112c:	4603      	mov	r3, r0
- 800112e:	637b      	str	r3, [r7, #52]	; 0x34
+ 800109e:	2014      	movs	r0, #20
+ 80010a0:	f007 ffe8 	bl	8009074 <malloc>
+ 80010a4:	4603      	mov	r3, r0
+ 80010a6:	637b      	str	r3, [r7, #52]	; 0x34
     sprintf (path, "%s","/");
- 8001130:	6b7b      	ldr	r3, [r7, #52]	; 0x34
- 8001132:	4929      	ldr	r1, [pc, #164]	; (80011d8 <Format_SD+0xb8>)
- 8001134:	461a      	mov	r2, r3
- 8001136:	460b      	mov	r3, r1
- 8001138:	881b      	ldrh	r3, [r3, #0]
- 800113a:	8013      	strh	r3, [r2, #0]
+ 80010a8:	6b7b      	ldr	r3, [r7, #52]	; 0x34
+ 80010aa:	4929      	ldr	r1, [pc, #164]	; (8001150 <Format_SD+0xb8>)
+ 80010ac:	461a      	mov	r2, r3
+ 80010ae:	460b      	mov	r3, r1
+ 80010b0:	881b      	ldrh	r3, [r3, #0]
+ 80010b2:	8013      	strh	r3, [r2, #0]
 
     fresult = f_opendir(&dir, path);                       /* Open the directory */
- 800113c:	463b      	mov	r3, r7
- 800113e:	6b79      	ldr	r1, [r7, #52]	; 0x34
- 8001140:	4618      	mov	r0, r3
- 8001142:	f007 fcee 	bl	8008b22 <f_opendir>
- 8001146:	4603      	mov	r3, r0
- 8001148:	461a      	mov	r2, r3
- 800114a:	4b24      	ldr	r3, [pc, #144]	; (80011dc <Format_SD+0xbc>)
- 800114c:	701a      	strb	r2, [r3, #0]
+ 80010b4:	463b      	mov	r3, r7
+ 80010b6:	6b79      	ldr	r1, [r7, #52]	; 0x34
+ 80010b8:	4618      	mov	r0, r3
+ 80010ba:	f007 fd32 	bl	8008b22 <f_opendir>
+ 80010be:	4603      	mov	r3, r0
+ 80010c0:	461a      	mov	r2, r3
+ 80010c2:	4b24      	ldr	r3, [pc, #144]	; (8001154 <Format_SD+0xbc>)
+ 80010c4:	701a      	strb	r2, [r3, #0]
     if (fresult == FR_OK)
- 800114e:	4b23      	ldr	r3, [pc, #140]	; (80011dc <Format_SD+0xbc>)
- 8001150:	781b      	ldrb	r3, [r3, #0]
- 8001152:	2b00      	cmp	r3, #0
- 8001154:	d136      	bne.n	80011c4 <Format_SD+0xa4>
+ 80010c6:	4b23      	ldr	r3, [pc, #140]	; (8001154 <Format_SD+0xbc>)
+ 80010c8:	781b      	ldrb	r3, [r3, #0]
+ 80010ca:	2b00      	cmp	r3, #0
+ 80010cc:	d136      	bne.n	800113c <Format_SD+0xa4>
     {
         for (;;)
         {
             fresult = f_readdir(&dir, &fno);                   /* Read a directory item */
- 8001156:	463b      	mov	r3, r7
- 8001158:	4921      	ldr	r1, [pc, #132]	; (80011e0 <Format_SD+0xc0>)
- 800115a:	4618      	mov	r0, r3
- 800115c:	f007 fda5 	bl	8008caa <f_readdir>
- 8001160:	4603      	mov	r3, r0
- 8001162:	461a      	mov	r2, r3
- 8001164:	4b1d      	ldr	r3, [pc, #116]	; (80011dc <Format_SD+0xbc>)
- 8001166:	701a      	strb	r2, [r3, #0]
+ 80010ce:	463b      	mov	r3, r7
+ 80010d0:	4921      	ldr	r1, [pc, #132]	; (8001158 <Format_SD+0xc0>)
+ 80010d2:	4618      	mov	r0, r3
+ 80010d4:	f007 fde9 	bl	8008caa <f_readdir>
+ 80010d8:	4603      	mov	r3, r0
+ 80010da:	461a      	mov	r2, r3
+ 80010dc:	4b1d      	ldr	r3, [pc, #116]	; (8001154 <Format_SD+0xbc>)
+ 80010de:	701a      	strb	r2, [r3, #0]
             if (fresult != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
- 8001168:	4b1c      	ldr	r3, [pc, #112]	; (80011dc <Format_SD+0xbc>)
- 800116a:	781b      	ldrb	r3, [r3, #0]
- 800116c:	2b00      	cmp	r3, #0
- 800116e:	d125      	bne.n	80011bc <Format_SD+0x9c>
- 8001170:	4b1b      	ldr	r3, [pc, #108]	; (80011e0 <Format_SD+0xc0>)
- 8001172:	7d9b      	ldrb	r3, [r3, #22]
- 8001174:	2b00      	cmp	r3, #0
- 8001176:	d021      	beq.n	80011bc <Format_SD+0x9c>
+ 80010e0:	4b1c      	ldr	r3, [pc, #112]	; (8001154 <Format_SD+0xbc>)
+ 80010e2:	781b      	ldrb	r3, [r3, #0]
+ 80010e4:	2b00      	cmp	r3, #0
+ 80010e6:	d125      	bne.n	8001134 <Format_SD+0x9c>
+ 80010e8:	4b1b      	ldr	r3, [pc, #108]	; (8001158 <Format_SD+0xc0>)
+ 80010ea:	7d9b      	ldrb	r3, [r3, #22]
+ 80010ec:	2b00      	cmp	r3, #0
+ 80010ee:	d021      	beq.n	8001134 <Format_SD+0x9c>
             if (fno.fattrib & AM_DIR)     /* It is a directory */
- 8001178:	4b19      	ldr	r3, [pc, #100]	; (80011e0 <Format_SD+0xc0>)
- 800117a:	7a1b      	ldrb	r3, [r3, #8]
- 800117c:	f003 0310 	and.w	r3, r3, #16
- 8001180:	2b00      	cmp	r3, #0
- 8001182:	d011      	beq.n	80011a8 <Format_SD+0x88>
+ 80010f0:	4b19      	ldr	r3, [pc, #100]	; (8001158 <Format_SD+0xc0>)
+ 80010f2:	7a1b      	ldrb	r3, [r3, #8]
+ 80010f4:	f003 0310 	and.w	r3, r3, #16
+ 80010f8:	2b00      	cmp	r3, #0
+ 80010fa:	d011      	beq.n	8001120 <Format_SD+0x88>
             {
             	if (!(strcmp ("SYSTEM~1", fno.fname))) continue;
- 8001184:	4917      	ldr	r1, [pc, #92]	; (80011e4 <Format_SD+0xc4>)
- 8001186:	4818      	ldr	r0, [pc, #96]	; (80011e8 <Format_SD+0xc8>)
- 8001188:	f7ff f842 	bl	8000210 <strcmp>
- 800118c:	4603      	mov	r3, r0
- 800118e:	2b00      	cmp	r3, #0
- 8001190:	d012      	beq.n	80011b8 <Format_SD+0x98>
+ 80010fc:	4917      	ldr	r1, [pc, #92]	; (800115c <Format_SD+0xc4>)
+ 80010fe:	4818      	ldr	r0, [pc, #96]	; (8001160 <Format_SD+0xc8>)
+ 8001100:	f7ff f886 	bl	8000210 <strcmp>
+ 8001104:	4603      	mov	r3, r0
+ 8001106:	2b00      	cmp	r3, #0
+ 8001108:	d012      	beq.n	8001130 <Format_SD+0x98>
             	fresult = f_unlink(fno.fname);
- 8001192:	4814      	ldr	r0, [pc, #80]	; (80011e4 <Format_SD+0xc4>)
- 8001194:	f007 fe26 	bl	8008de4 <f_unlink>
- 8001198:	4603      	mov	r3, r0
- 800119a:	461a      	mov	r2, r3
- 800119c:	4b0f      	ldr	r3, [pc, #60]	; (80011dc <Format_SD+0xbc>)
- 800119e:	701a      	strb	r2, [r3, #0]
+ 800110a:	4814      	ldr	r0, [pc, #80]	; (800115c <Format_SD+0xc4>)
+ 800110c:	f007 fe6a 	bl	8008de4 <f_unlink>
+ 8001110:	4603      	mov	r3, r0
+ 8001112:	461a      	mov	r2, r3
+ 8001114:	4b0f      	ldr	r3, [pc, #60]	; (8001154 <Format_SD+0xbc>)
+ 8001116:	701a      	strb	r2, [r3, #0]
             	if (fresult == FR_DENIED) continue;
- 80011a0:	4b0e      	ldr	r3, [pc, #56]	; (80011dc <Format_SD+0xbc>)
- 80011a2:	781b      	ldrb	r3, [r3, #0]
- 80011a4:	2b07      	cmp	r3, #7
- 80011a6:	e7d6      	b.n	8001156 <Format_SD+0x36>
+ 8001118:	4b0e      	ldr	r3, [pc, #56]	; (8001154 <Format_SD+0xbc>)
+ 800111a:	781b      	ldrb	r3, [r3, #0]
+ 800111c:	2b07      	cmp	r3, #7
+ 800111e:	e7d6      	b.n	80010ce <Format_SD+0x36>
             }
             else
             {   /* It is a file. */
                fresult = f_unlink(fno.fname);
- 80011a8:	480e      	ldr	r0, [pc, #56]	; (80011e4 <Format_SD+0xc4>)
- 80011aa:	f007 fe1b 	bl	8008de4 <f_unlink>
- 80011ae:	4603      	mov	r3, r0
- 80011b0:	461a      	mov	r2, r3
- 80011b2:	4b0a      	ldr	r3, [pc, #40]	; (80011dc <Format_SD+0xbc>)
- 80011b4:	701a      	strb	r2, [r3, #0]
- 80011b6:	e7ce      	b.n	8001156 <Format_SD+0x36>
+ 8001120:	480e      	ldr	r0, [pc, #56]	; (800115c <Format_SD+0xc4>)
+ 8001122:	f007 fe5f 	bl	8008de4 <f_unlink>
+ 8001126:	4603      	mov	r3, r0
+ 8001128:	461a      	mov	r2, r3
+ 800112a:	4b0a      	ldr	r3, [pc, #40]	; (8001154 <Format_SD+0xbc>)
+ 800112c:	701a      	strb	r2, [r3, #0]
+ 800112e:	e7ce      	b.n	80010ce <Format_SD+0x36>
             	if (!(strcmp ("SYSTEM~1", fno.fname))) continue;
- 80011b8:	bf00      	nop
+ 8001130:	bf00      	nop
             fresult = f_readdir(&dir, &fno);                   /* Read a directory item */
- 80011ba:	e7cc      	b.n	8001156 <Format_SD+0x36>
+ 8001132:	e7cc      	b.n	80010ce <Format_SD+0x36>
             }
         }
         f_closedir(&dir);
- 80011bc:	463b      	mov	r3, r7
- 80011be:	4618      	mov	r0, r3
- 80011c0:	f007 fd4d 	bl	8008c5e <f_closedir>
+ 8001134:	463b      	mov	r3, r7
+ 8001136:	4618      	mov	r0, r3
+ 8001138:	f007 fd91 	bl	8008c5e <f_closedir>
     }
     free(path);
- 80011c4:	6b78      	ldr	r0, [r7, #52]	; 0x34
- 80011c6:	f007 ff5d 	bl	8009084 <free>
+ 800113c:	6b78      	ldr	r0, [r7, #52]	; 0x34
+ 800113e:	f007 ffa1 	bl	8009084 <free>
     return fresult;
- 80011ca:	4b04      	ldr	r3, [pc, #16]	; (80011dc <Format_SD+0xbc>)
- 80011cc:	781b      	ldrb	r3, [r3, #0]
+ 8001142:	4b04      	ldr	r3, [pc, #16]	; (8001154 <Format_SD+0xbc>)
+ 8001144:	781b      	ldrb	r3, [r3, #0]
 }
- 80011ce:	4618      	mov	r0, r3
- 80011d0:	3738      	adds	r7, #56	; 0x38
- 80011d2:	46bd      	mov	sp, r7
- 80011d4:	bd80      	pop	{r7, pc}
- 80011d6:	bf00      	nop
- 80011d8:	0800bc60 	.word	0x0800bc60
- 80011dc:	20000668 	.word	0x20000668
- 80011e0:	2000030c 	.word	0x2000030c
- 80011e4:	20000322 	.word	0x20000322
- 80011e8:	0800bc34 	.word	0x0800bc34
+ 8001146:	4618      	mov	r0, r3
+ 8001148:	3738      	adds	r7, #56	; 0x38
+ 800114a:	46bd      	mov	sp, r7
+ 800114c:	bd80      	pop	{r7, pc}
+ 800114e:	bf00      	nop
+ 8001150:	0800bc60 	.word	0x0800bc60
+ 8001154:	20000668 	.word	0x20000668
+ 8001158:	2000030c 	.word	0x2000030c
+ 800115c:	20000322 	.word	0x20000322
+ 8001160:	0800bc34 	.word	0x0800bc34
 
-080011ec <Create_File>:
+08001164 <Create_File>:
 	    return fresult;
 	}
 }
 
 FRESULT Create_File (char *name)
 {
- 80011ec:	b580      	push	{r7, lr}
- 80011ee:	b088      	sub	sp, #32
- 80011f0:	af00      	add	r7, sp, #0
- 80011f2:	6078      	str	r0, [r7, #4]
+ 8001164:	b580      	push	{r7, lr}
+ 8001166:	b088      	sub	sp, #32
+ 8001168:	af00      	add	r7, sp, #0
+ 800116a:	6078      	str	r0, [r7, #4]
 	fresult = f_stat (name, &fno);
- 80011f4:	4943      	ldr	r1, [pc, #268]	; (8001304 <Create_File+0x118>)
- 80011f6:	6878      	ldr	r0, [r7, #4]
- 80011f8:	f007 fdaf 	bl	8008d5a <f_stat>
- 80011fc:	4603      	mov	r3, r0
- 80011fe:	461a      	mov	r2, r3
- 8001200:	4b41      	ldr	r3, [pc, #260]	; (8001308 <Create_File+0x11c>)
- 8001202:	701a      	strb	r2, [r3, #0]
+ 800116c:	4943      	ldr	r1, [pc, #268]	; (800127c <Create_File+0x118>)
+ 800116e:	6878      	ldr	r0, [r7, #4]
+ 8001170:	f007 fdf3 	bl	8008d5a <f_stat>
+ 8001174:	4603      	mov	r3, r0
+ 8001176:	461a      	mov	r2, r3
+ 8001178:	4b41      	ldr	r3, [pc, #260]	; (8001280 <Create_File+0x11c>)
+ 800117a:	701a      	strb	r2, [r3, #0]
 	if (fresult == FR_OK)
- 8001204:	4b40      	ldr	r3, [pc, #256]	; (8001308 <Create_File+0x11c>)
- 8001206:	781b      	ldrb	r3, [r3, #0]
- 8001208:	2b00      	cmp	r3, #0
- 800120a:	d112      	bne.n	8001232 <Create_File+0x46>
+ 800117c:	4b40      	ldr	r3, [pc, #256]	; (8001280 <Create_File+0x11c>)
+ 800117e:	781b      	ldrb	r3, [r3, #0]
+ 8001180:	2b00      	cmp	r3, #0
+ 8001182:	d112      	bne.n	80011aa <Create_File+0x46>
 	{
 		char *buf = malloc(100*sizeof(char));
- 800120c:	2064      	movs	r0, #100	; 0x64
- 800120e:	f007 ff31 	bl	8009074 <malloc>
- 8001212:	4603      	mov	r3, r0
- 8001214:	60fb      	str	r3, [r7, #12]
+ 8001184:	2064      	movs	r0, #100	; 0x64
+ 8001186:	f007 ff75 	bl	8009074 <malloc>
+ 800118a:	4603      	mov	r3, r0
+ 800118c:	60fb      	str	r3, [r7, #12]
 		sprintf (buf, "ERROR!!! *%s* already exists!!!!\n use Update_File \n",name);
- 8001216:	687a      	ldr	r2, [r7, #4]
- 8001218:	493c      	ldr	r1, [pc, #240]	; (800130c <Create_File+0x120>)
- 800121a:	68f8      	ldr	r0, [r7, #12]
- 800121c:	f008 fd06 	bl	8009c2c <siprintf>
+ 800118e:	687a      	ldr	r2, [r7, #4]
+ 8001190:	493c      	ldr	r1, [pc, #240]	; (8001284 <Create_File+0x120>)
+ 8001192:	68f8      	ldr	r0, [r7, #12]
+ 8001194:	f008 fd4a 	bl	8009c2c <siprintf>
 		printf(buf);
- 8001220:	68f8      	ldr	r0, [r7, #12]
- 8001222:	f008 fc43 	bl	8009aac <iprintf>
+ 8001198:	68f8      	ldr	r0, [r7, #12]
+ 800119a:	f008 fc87 	bl	8009aac <iprintf>
 		free(buf);
- 8001226:	68f8      	ldr	r0, [r7, #12]
- 8001228:	f007 ff2c 	bl	8009084 <free>
+ 800119e:	68f8      	ldr	r0, [r7, #12]
+ 80011a0:	f007 ff70 	bl	8009084 <free>
 	    return fresult;
- 800122c:	4b36      	ldr	r3, [pc, #216]	; (8001308 <Create_File+0x11c>)
- 800122e:	781b      	ldrb	r3, [r3, #0]
- 8001230:	e063      	b.n	80012fa <Create_File+0x10e>
+ 80011a4:	4b36      	ldr	r3, [pc, #216]	; (8001280 <Create_File+0x11c>)
+ 80011a6:	781b      	ldrb	r3, [r3, #0]
+ 80011a8:	e063      	b.n	8001272 <Create_File+0x10e>
 	}
 	else
 	{
 		fresult = f_open(&fil, name, FA_CREATE_ALWAYS|FA_READ|FA_WRITE);
- 8001232:	220b      	movs	r2, #11
- 8001234:	6879      	ldr	r1, [r7, #4]
- 8001236:	4836      	ldr	r0, [pc, #216]	; (8001310 <Create_File+0x124>)
- 8001238:	f007 f80c 	bl	8008254 <f_open>
- 800123c:	4603      	mov	r3, r0
- 800123e:	461a      	mov	r2, r3
- 8001240:	4b31      	ldr	r3, [pc, #196]	; (8001308 <Create_File+0x11c>)
- 8001242:	701a      	strb	r2, [r3, #0]
+ 80011aa:	220b      	movs	r2, #11
+ 80011ac:	6879      	ldr	r1, [r7, #4]
+ 80011ae:	4836      	ldr	r0, [pc, #216]	; (8001288 <Create_File+0x124>)
+ 80011b0:	f007 f850 	bl	8008254 <f_open>
+ 80011b4:	4603      	mov	r3, r0
+ 80011b6:	461a      	mov	r2, r3
+ 80011b8:	4b31      	ldr	r3, [pc, #196]	; (8001280 <Create_File+0x11c>)
+ 80011ba:	701a      	strb	r2, [r3, #0]
 		if (fresult != FR_OK)
- 8001244:	4b30      	ldr	r3, [pc, #192]	; (8001308 <Create_File+0x11c>)
- 8001246:	781b      	ldrb	r3, [r3, #0]
- 8001248:	2b00      	cmp	r3, #0
- 800124a:	d015      	beq.n	8001278 <Create_File+0x8c>
+ 80011bc:	4b30      	ldr	r3, [pc, #192]	; (8001280 <Create_File+0x11c>)
+ 80011be:	781b      	ldrb	r3, [r3, #0]
+ 80011c0:	2b00      	cmp	r3, #0
+ 80011c2:	d015      	beq.n	80011f0 <Create_File+0x8c>
 		{
 			char *buf = malloc(100*sizeof(char));
- 800124c:	2064      	movs	r0, #100	; 0x64
- 800124e:	f007 ff11 	bl	8009074 <malloc>
- 8001252:	4603      	mov	r3, r0
- 8001254:	613b      	str	r3, [r7, #16]
+ 80011c4:	2064      	movs	r0, #100	; 0x64
+ 80011c6:	f007 ff55 	bl	8009074 <malloc>
+ 80011ca:	4603      	mov	r3, r0
+ 80011cc:	613b      	str	r3, [r7, #16]
 			sprintf (buf, "ERROR!!! No. %d in creating file *%s*\n", fresult, name);
- 8001256:	4b2c      	ldr	r3, [pc, #176]	; (8001308 <Create_File+0x11c>)
- 8001258:	781b      	ldrb	r3, [r3, #0]
- 800125a:	461a      	mov	r2, r3
- 800125c:	687b      	ldr	r3, [r7, #4]
- 800125e:	492d      	ldr	r1, [pc, #180]	; (8001314 <Create_File+0x128>)
- 8001260:	6938      	ldr	r0, [r7, #16]
- 8001262:	f008 fce3 	bl	8009c2c <siprintf>
+ 80011ce:	4b2c      	ldr	r3, [pc, #176]	; (8001280 <Create_File+0x11c>)
+ 80011d0:	781b      	ldrb	r3, [r3, #0]
+ 80011d2:	461a      	mov	r2, r3
+ 80011d4:	687b      	ldr	r3, [r7, #4]
+ 80011d6:	492d      	ldr	r1, [pc, #180]	; (800128c <Create_File+0x128>)
+ 80011d8:	6938      	ldr	r0, [r7, #16]
+ 80011da:	f008 fd27 	bl	8009c2c <siprintf>
 			printf(buf);
- 8001266:	6938      	ldr	r0, [r7, #16]
- 8001268:	f008 fc20 	bl	8009aac <iprintf>
+ 80011de:	6938      	ldr	r0, [r7, #16]
+ 80011e0:	f008 fc64 	bl	8009aac <iprintf>
 			free(buf);
- 800126c:	6938      	ldr	r0, [r7, #16]
- 800126e:	f007 ff09 	bl	8009084 <free>
+ 80011e4:	6938      	ldr	r0, [r7, #16]
+ 80011e6:	f007 ff4d 	bl	8009084 <free>
 		    return fresult;
- 8001272:	4b25      	ldr	r3, [pc, #148]	; (8001308 <Create_File+0x11c>)
- 8001274:	781b      	ldrb	r3, [r3, #0]
- 8001276:	e040      	b.n	80012fa <Create_File+0x10e>
+ 80011ea:	4b25      	ldr	r3, [pc, #148]	; (8001280 <Create_File+0x11c>)
+ 80011ec:	781b      	ldrb	r3, [r3, #0]
+ 80011ee:	e040      	b.n	8001272 <Create_File+0x10e>
 		}
 		else
 		{
 			char *buf = malloc(100*sizeof(char));
- 8001278:	2064      	movs	r0, #100	; 0x64
- 800127a:	f007 fefb 	bl	8009074 <malloc>
- 800127e:	4603      	mov	r3, r0
- 8001280:	61fb      	str	r3, [r7, #28]
+ 80011f0:	2064      	movs	r0, #100	; 0x64
+ 80011f2:	f007 ff3f 	bl	8009074 <malloc>
+ 80011f6:	4603      	mov	r3, r0
+ 80011f8:	61fb      	str	r3, [r7, #28]
 			sprintf (buf, "*%s* created successfully\n Now use Write_File to write data\n",name);
- 8001282:	687a      	ldr	r2, [r7, #4]
- 8001284:	4924      	ldr	r1, [pc, #144]	; (8001318 <Create_File+0x12c>)
- 8001286:	69f8      	ldr	r0, [r7, #28]
- 8001288:	f008 fcd0 	bl	8009c2c <siprintf>
+ 80011fa:	687a      	ldr	r2, [r7, #4]
+ 80011fc:	4924      	ldr	r1, [pc, #144]	; (8001290 <Create_File+0x12c>)
+ 80011fe:	69f8      	ldr	r0, [r7, #28]
+ 8001200:	f008 fd14 	bl	8009c2c <siprintf>
 			printf(buf);
- 800128c:	69f8      	ldr	r0, [r7, #28]
- 800128e:	f008 fc0d 	bl	8009aac <iprintf>
+ 8001204:	69f8      	ldr	r0, [r7, #28]
+ 8001206:	f008 fc51 	bl	8009aac <iprintf>
 			free(buf);
- 8001292:	69f8      	ldr	r0, [r7, #28]
- 8001294:	f007 fef6 	bl	8009084 <free>
+ 800120a:	69f8      	ldr	r0, [r7, #28]
+ 800120c:	f007 ff3a 	bl	8009084 <free>
 		}
 
 		fresult = f_close(&fil);
- 8001298:	481d      	ldr	r0, [pc, #116]	; (8001310 <Create_File+0x124>)
- 800129a:	f007 fc18 	bl	8008ace <f_close>
- 800129e:	4603      	mov	r3, r0
- 80012a0:	461a      	mov	r2, r3
- 80012a2:	4b19      	ldr	r3, [pc, #100]	; (8001308 <Create_File+0x11c>)
- 80012a4:	701a      	strb	r2, [r3, #0]
+ 8001210:	481d      	ldr	r0, [pc, #116]	; (8001288 <Create_File+0x124>)
+ 8001212:	f007 fc5c 	bl	8008ace <f_close>
+ 8001216:	4603      	mov	r3, r0
+ 8001218:	461a      	mov	r2, r3
+ 800121a:	4b19      	ldr	r3, [pc, #100]	; (8001280 <Create_File+0x11c>)
+ 800121c:	701a      	strb	r2, [r3, #0]
 		if (fresult != FR_OK)
- 80012a6:	4b18      	ldr	r3, [pc, #96]	; (8001308 <Create_File+0x11c>)
- 80012a8:	781b      	ldrb	r3, [r3, #0]
- 80012aa:	2b00      	cmp	r3, #0
- 80012ac:	d013      	beq.n	80012d6 <Create_File+0xea>
+ 800121e:	4b18      	ldr	r3, [pc, #96]	; (8001280 <Create_File+0x11c>)
+ 8001220:	781b      	ldrb	r3, [r3, #0]
+ 8001222:	2b00      	cmp	r3, #0
+ 8001224:	d013      	beq.n	800124e <Create_File+0xea>
 		{
 			char *buf = malloc(100*sizeof(char));
- 80012ae:	2064      	movs	r0, #100	; 0x64
- 80012b0:	f007 fee0 	bl	8009074 <malloc>
- 80012b4:	4603      	mov	r3, r0
- 80012b6:	617b      	str	r3, [r7, #20]
+ 8001226:	2064      	movs	r0, #100	; 0x64
+ 8001228:	f007 ff24 	bl	8009074 <malloc>
+ 800122c:	4603      	mov	r3, r0
+ 800122e:	617b      	str	r3, [r7, #20]
 			sprintf (buf, "ERROR No. %d in closing file *%s*\n", fresult, name);
- 80012b8:	4b13      	ldr	r3, [pc, #76]	; (8001308 <Create_File+0x11c>)
- 80012ba:	781b      	ldrb	r3, [r3, #0]
- 80012bc:	461a      	mov	r2, r3
- 80012be:	687b      	ldr	r3, [r7, #4]
- 80012c0:	4916      	ldr	r1, [pc, #88]	; (800131c <Create_File+0x130>)
- 80012c2:	6978      	ldr	r0, [r7, #20]
- 80012c4:	f008 fcb2 	bl	8009c2c <siprintf>
+ 8001230:	4b13      	ldr	r3, [pc, #76]	; (8001280 <Create_File+0x11c>)
+ 8001232:	781b      	ldrb	r3, [r3, #0]
+ 8001234:	461a      	mov	r2, r3
+ 8001236:	687b      	ldr	r3, [r7, #4]
+ 8001238:	4916      	ldr	r1, [pc, #88]	; (8001294 <Create_File+0x130>)
+ 800123a:	6978      	ldr	r0, [r7, #20]
+ 800123c:	f008 fcf6 	bl	8009c2c <siprintf>
 			printf(buf);
- 80012c8:	6978      	ldr	r0, [r7, #20]
- 80012ca:	f008 fbef 	bl	8009aac <iprintf>
+ 8001240:	6978      	ldr	r0, [r7, #20]
+ 8001242:	f008 fc33 	bl	8009aac <iprintf>
 			free(buf);
- 80012ce:	6978      	ldr	r0, [r7, #20]
- 80012d0:	f007 fed8 	bl	8009084 <free>
- 80012d4:	e00f      	b.n	80012f6 <Create_File+0x10a>
+ 8001246:	6978      	ldr	r0, [r7, #20]
+ 8001248:	f007 ff1c 	bl	8009084 <free>
+ 800124c:	e00f      	b.n	800126e <Create_File+0x10a>
 		}
 		else
 		{
 			char *buf = malloc(100*sizeof(char));
- 80012d6:	2064      	movs	r0, #100	; 0x64
- 80012d8:	f007 fecc 	bl	8009074 <malloc>
- 80012dc:	4603      	mov	r3, r0
- 80012de:	61bb      	str	r3, [r7, #24]
+ 800124e:	2064      	movs	r0, #100	; 0x64
+ 8001250:	f007 ff10 	bl	8009074 <malloc>
+ 8001254:	4603      	mov	r3, r0
+ 8001256:	61bb      	str	r3, [r7, #24]
 			sprintf (buf, "File *%s* CLOSED successfully\n", name);
- 80012e0:	687a      	ldr	r2, [r7, #4]
- 80012e2:	490f      	ldr	r1, [pc, #60]	; (8001320 <Create_File+0x134>)
- 80012e4:	69b8      	ldr	r0, [r7, #24]
- 80012e6:	f008 fca1 	bl	8009c2c <siprintf>
+ 8001258:	687a      	ldr	r2, [r7, #4]
+ 800125a:	490f      	ldr	r1, [pc, #60]	; (8001298 <Create_File+0x134>)
+ 800125c:	69b8      	ldr	r0, [r7, #24]
+ 800125e:	f008 fce5 	bl	8009c2c <siprintf>
 			printf(buf);
- 80012ea:	69b8      	ldr	r0, [r7, #24]
- 80012ec:	f008 fbde 	bl	8009aac <iprintf>
+ 8001262:	69b8      	ldr	r0, [r7, #24]
+ 8001264:	f008 fc22 	bl	8009aac <iprintf>
 			free(buf);
- 80012f0:	69b8      	ldr	r0, [r7, #24]
- 80012f2:	f007 fec7 	bl	8009084 <free>
+ 8001268:	69b8      	ldr	r0, [r7, #24]
+ 800126a:	f007 ff0b 	bl	8009084 <free>
 		}
 	}
     return fresult;
- 80012f6:	4b04      	ldr	r3, [pc, #16]	; (8001308 <Create_File+0x11c>)
- 80012f8:	781b      	ldrb	r3, [r3, #0]
+ 800126e:	4b04      	ldr	r3, [pc, #16]	; (8001280 <Create_File+0x11c>)
+ 8001270:	781b      	ldrb	r3, [r3, #0]
 }
- 80012fa:	4618      	mov	r0, r3
- 80012fc:	3720      	adds	r7, #32
- 80012fe:	46bd      	mov	sp, r7
- 8001300:	bd80      	pop	{r7, pc}
- 8001302:	bf00      	nop
- 8001304:	2000030c 	.word	0x2000030c
- 8001308:	20000668 	.word	0x20000668
- 800130c:	0800bdd4 	.word	0x0800bdd4
- 8001310:	20000670 	.word	0x20000670
- 8001314:	0800be08 	.word	0x0800be08
- 8001318:	0800be30 	.word	0x0800be30
- 800131c:	0800be70 	.word	0x0800be70
- 8001320:	0800bdb4 	.word	0x0800bdb4
+ 8001272:	4618      	mov	r0, r3
+ 8001274:	3720      	adds	r7, #32
+ 8001276:	46bd      	mov	sp, r7
+ 8001278:	bd80      	pop	{r7, pc}
+ 800127a:	bf00      	nop
+ 800127c:	2000030c 	.word	0x2000030c
+ 8001280:	20000668 	.word	0x20000668
+ 8001284:	0800bdd4 	.word	0x0800bdd4
+ 8001288:	20000670 	.word	0x20000670
+ 800128c:	0800be08 	.word	0x0800be08
+ 8001290:	0800be30 	.word	0x0800be30
+ 8001294:	0800be70 	.word	0x0800be70
+ 8001298:	0800bdb4 	.word	0x0800bdb4
 
-08001324 <Update_File>:
+0800129c <Update_File>:
 
 FRESULT Update_File (char *name, char *data)
 {
- 8001324:	b580      	push	{r7, lr}
- 8001326:	b088      	sub	sp, #32
- 8001328:	af00      	add	r7, sp, #0
- 800132a:	6078      	str	r0, [r7, #4]
- 800132c:	6039      	str	r1, [r7, #0]
+ 800129c:	b580      	push	{r7, lr}
+ 800129e:	b088      	sub	sp, #32
+ 80012a0:	af00      	add	r7, sp, #0
+ 80012a2:	6078      	str	r0, [r7, #4]
+ 80012a4:	6039      	str	r1, [r7, #0]
 	/**** check whether the file exists or not ****/
 	fresult = f_stat (name, &fno);
- 800132e:	4956      	ldr	r1, [pc, #344]	; (8001488 <Update_File+0x164>)
- 8001330:	6878      	ldr	r0, [r7, #4]
- 8001332:	f007 fd12 	bl	8008d5a <f_stat>
- 8001336:	4603      	mov	r3, r0
- 8001338:	461a      	mov	r2, r3
- 800133a:	4b54      	ldr	r3, [pc, #336]	; (800148c <Update_File+0x168>)
- 800133c:	701a      	strb	r2, [r3, #0]
+ 80012a6:	4956      	ldr	r1, [pc, #344]	; (8001400 <Update_File+0x164>)
+ 80012a8:	6878      	ldr	r0, [r7, #4]
+ 80012aa:	f007 fd56 	bl	8008d5a <f_stat>
+ 80012ae:	4603      	mov	r3, r0
+ 80012b0:	461a      	mov	r2, r3
+ 80012b2:	4b54      	ldr	r3, [pc, #336]	; (8001404 <Update_File+0x168>)
+ 80012b4:	701a      	strb	r2, [r3, #0]
 	if (fresult != FR_OK)
- 800133e:	4b53      	ldr	r3, [pc, #332]	; (800148c <Update_File+0x168>)
- 8001340:	781b      	ldrb	r3, [r3, #0]
- 8001342:	2b00      	cmp	r3, #0
- 8001344:	d012      	beq.n	800136c <Update_File+0x48>
+ 80012b6:	4b53      	ldr	r3, [pc, #332]	; (8001404 <Update_File+0x168>)
+ 80012b8:	781b      	ldrb	r3, [r3, #0]
+ 80012ba:	2b00      	cmp	r3, #0
+ 80012bc:	d012      	beq.n	80012e4 <Update_File+0x48>
 	{
 		char *buf = malloc(100*sizeof(char));
- 8001346:	2064      	movs	r0, #100	; 0x64
- 8001348:	f007 fe94 	bl	8009074 <malloc>
- 800134c:	4603      	mov	r3, r0
- 800134e:	60bb      	str	r3, [r7, #8]
+ 80012be:	2064      	movs	r0, #100	; 0x64
+ 80012c0:	f007 fed8 	bl	8009074 <malloc>
+ 80012c4:	4603      	mov	r3, r0
+ 80012c6:	60bb      	str	r3, [r7, #8]
 		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
- 8001350:	687a      	ldr	r2, [r7, #4]
- 8001352:	494f      	ldr	r1, [pc, #316]	; (8001490 <Update_File+0x16c>)
- 8001354:	68b8      	ldr	r0, [r7, #8]
- 8001356:	f008 fc69 	bl	8009c2c <siprintf>
+ 80012c8:	687a      	ldr	r2, [r7, #4]
+ 80012ca:	494f      	ldr	r1, [pc, #316]	; (8001408 <Update_File+0x16c>)
+ 80012cc:	68b8      	ldr	r0, [r7, #8]
+ 80012ce:	f008 fcad 	bl	8009c2c <siprintf>
 		printf (buf);
- 800135a:	68b8      	ldr	r0, [r7, #8]
- 800135c:	f008 fba6 	bl	8009aac <iprintf>
+ 80012d2:	68b8      	ldr	r0, [r7, #8]
+ 80012d4:	f008 fbea 	bl	8009aac <iprintf>
 		free(buf);
- 8001360:	68b8      	ldr	r0, [r7, #8]
- 8001362:	f007 fe8f 	bl	8009084 <free>
+ 80012d8:	68b8      	ldr	r0, [r7, #8]
+ 80012da:	f007 fed3 	bl	8009084 <free>
 	    return fresult;
- 8001366:	4b49      	ldr	r3, [pc, #292]	; (800148c <Update_File+0x168>)
- 8001368:	781b      	ldrb	r3, [r3, #0]
- 800136a:	e088      	b.n	800147e <Update_File+0x15a>
+ 80012de:	4b49      	ldr	r3, [pc, #292]	; (8001404 <Update_File+0x168>)
+ 80012e0:	781b      	ldrb	r3, [r3, #0]
+ 80012e2:	e088      	b.n	80013f6 <Update_File+0x15a>
 	}
 
 	else
 	{
 		 /* Create a file with read write access and open it */
 	    fresult = f_open(&fil, name, FA_OPEN_APPEND | FA_WRITE);
- 800136c:	2232      	movs	r2, #50	; 0x32
- 800136e:	6879      	ldr	r1, [r7, #4]
- 8001370:	4848      	ldr	r0, [pc, #288]	; (8001494 <Update_File+0x170>)
- 8001372:	f006 ff6f 	bl	8008254 <f_open>
- 8001376:	4603      	mov	r3, r0
- 8001378:	461a      	mov	r2, r3
- 800137a:	4b44      	ldr	r3, [pc, #272]	; (800148c <Update_File+0x168>)
- 800137c:	701a      	strb	r2, [r3, #0]
+ 80012e4:	2232      	movs	r2, #50	; 0x32
+ 80012e6:	6879      	ldr	r1, [r7, #4]
+ 80012e8:	4848      	ldr	r0, [pc, #288]	; (800140c <Update_File+0x170>)
+ 80012ea:	f006 ffb3 	bl	8008254 <f_open>
+ 80012ee:	4603      	mov	r3, r0
+ 80012f0:	461a      	mov	r2, r3
+ 80012f2:	4b44      	ldr	r3, [pc, #272]	; (8001404 <Update_File+0x168>)
+ 80012f4:	701a      	strb	r2, [r3, #0]
 	    if (fresult != FR_OK)
- 800137e:	4b43      	ldr	r3, [pc, #268]	; (800148c <Update_File+0x168>)
- 8001380:	781b      	ldrb	r3, [r3, #0]
- 8001382:	2b00      	cmp	r3, #0
- 8001384:	d015      	beq.n	80013b2 <Update_File+0x8e>
+ 80012f6:	4b43      	ldr	r3, [pc, #268]	; (8001404 <Update_File+0x168>)
+ 80012f8:	781b      	ldrb	r3, [r3, #0]
+ 80012fa:	2b00      	cmp	r3, #0
+ 80012fc:	d015      	beq.n	800132a <Update_File+0x8e>
 	    {
 	    	char *buf = malloc(100*sizeof(char));
- 8001386:	2064      	movs	r0, #100	; 0x64
- 8001388:	f007 fe74 	bl	8009074 <malloc>
- 800138c:	4603      	mov	r3, r0
- 800138e:	60fb      	str	r3, [r7, #12]
+ 80012fe:	2064      	movs	r0, #100	; 0x64
+ 8001300:	f007 feb8 	bl	8009074 <malloc>
+ 8001304:	4603      	mov	r3, r0
+ 8001306:	60fb      	str	r3, [r7, #12]
 	    	sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
- 8001390:	4b3e      	ldr	r3, [pc, #248]	; (800148c <Update_File+0x168>)
- 8001392:	781b      	ldrb	r3, [r3, #0]
- 8001394:	461a      	mov	r2, r3
- 8001396:	687b      	ldr	r3, [r7, #4]
- 8001398:	493f      	ldr	r1, [pc, #252]	; (8001498 <Update_File+0x174>)
- 800139a:	68f8      	ldr	r0, [r7, #12]
- 800139c:	f008 fc46 	bl	8009c2c <siprintf>
+ 8001308:	4b3e      	ldr	r3, [pc, #248]	; (8001404 <Update_File+0x168>)
+ 800130a:	781b      	ldrb	r3, [r3, #0]
+ 800130c:	461a      	mov	r2, r3
+ 800130e:	687b      	ldr	r3, [r7, #4]
+ 8001310:	493f      	ldr	r1, [pc, #252]	; (8001410 <Update_File+0x174>)
+ 8001312:	68f8      	ldr	r0, [r7, #12]
+ 8001314:	f008 fc8a 	bl	8009c2c <siprintf>
 	    	printf(buf);
- 80013a0:	68f8      	ldr	r0, [r7, #12]
- 80013a2:	f008 fb83 	bl	8009aac <iprintf>
+ 8001318:	68f8      	ldr	r0, [r7, #12]
+ 800131a:	f008 fbc7 	bl	8009aac <iprintf>
 	        free(buf);
- 80013a6:	68f8      	ldr	r0, [r7, #12]
- 80013a8:	f007 fe6c 	bl	8009084 <free>
+ 800131e:	68f8      	ldr	r0, [r7, #12]
+ 8001320:	f007 feb0 	bl	8009084 <free>
 	        return fresult;
- 80013ac:	4b37      	ldr	r3, [pc, #220]	; (800148c <Update_File+0x168>)
- 80013ae:	781b      	ldrb	r3, [r3, #0]
- 80013b0:	e065      	b.n	800147e <Update_File+0x15a>
+ 8001324:	4b37      	ldr	r3, [pc, #220]	; (8001404 <Update_File+0x168>)
+ 8001326:	781b      	ldrb	r3, [r3, #0]
+ 8001328:	e065      	b.n	80013f6 <Update_File+0x15a>
 	    }
 
 	    /* Writing text */
 	    fresult = f_write(&fil, data, strlen (data), &bw);
- 80013b2:	6838      	ldr	r0, [r7, #0]
- 80013b4:	f7fe ff36 	bl	8000224 <strlen>
- 80013b8:	4602      	mov	r2, r0
- 80013ba:	4b38      	ldr	r3, [pc, #224]	; (800149c <Update_File+0x178>)
- 80013bc:	6839      	ldr	r1, [r7, #0]
- 80013be:	4835      	ldr	r0, [pc, #212]	; (8001494 <Update_File+0x170>)
- 80013c0:	f007 f992 	bl	80086e8 <f_write>
- 80013c4:	4603      	mov	r3, r0
- 80013c6:	461a      	mov	r2, r3
- 80013c8:	4b30      	ldr	r3, [pc, #192]	; (800148c <Update_File+0x168>)
- 80013ca:	701a      	strb	r2, [r3, #0]
+ 800132a:	6838      	ldr	r0, [r7, #0]
+ 800132c:	f7fe ff7a 	bl	8000224 <strlen>
+ 8001330:	4602      	mov	r2, r0
+ 8001332:	4b38      	ldr	r3, [pc, #224]	; (8001414 <Update_File+0x178>)
+ 8001334:	6839      	ldr	r1, [r7, #0]
+ 8001336:	4835      	ldr	r0, [pc, #212]	; (800140c <Update_File+0x170>)
+ 8001338:	f007 f9d6 	bl	80086e8 <f_write>
+ 800133c:	4603      	mov	r3, r0
+ 800133e:	461a      	mov	r2, r3
+ 8001340:	4b30      	ldr	r3, [pc, #192]	; (8001404 <Update_File+0x168>)
+ 8001342:	701a      	strb	r2, [r3, #0]
 	    if (fresult != FR_OK)
- 80013cc:	4b2f      	ldr	r3, [pc, #188]	; (800148c <Update_File+0x168>)
- 80013ce:	781b      	ldrb	r3, [r3, #0]
- 80013d0:	2b00      	cmp	r3, #0
- 80013d2:	d013      	beq.n	80013fc <Update_File+0xd8>
+ 8001344:	4b2f      	ldr	r3, [pc, #188]	; (8001404 <Update_File+0x168>)
+ 8001346:	781b      	ldrb	r3, [r3, #0]
+ 8001348:	2b00      	cmp	r3, #0
+ 800134a:	d013      	beq.n	8001374 <Update_File+0xd8>
 	    {
 	    	char *buf = malloc(100*sizeof(char));
- 80013d4:	2064      	movs	r0, #100	; 0x64
- 80013d6:	f007 fe4d 	bl	8009074 <malloc>
- 80013da:	4603      	mov	r3, r0
- 80013dc:	61bb      	str	r3, [r7, #24]
+ 800134c:	2064      	movs	r0, #100	; 0x64
+ 800134e:	f007 fe91 	bl	8009074 <malloc>
+ 8001352:	4603      	mov	r3, r0
+ 8001354:	61bb      	str	r3, [r7, #24]
 	    	sprintf (buf, "ERROR!!! No. %d in writing file *%s*\n", fresult, name);
- 80013de:	4b2b      	ldr	r3, [pc, #172]	; (800148c <Update_File+0x168>)
- 80013e0:	781b      	ldrb	r3, [r3, #0]
- 80013e2:	461a      	mov	r2, r3
- 80013e4:	687b      	ldr	r3, [r7, #4]
- 80013e6:	492e      	ldr	r1, [pc, #184]	; (80014a0 <Update_File+0x17c>)
- 80013e8:	69b8      	ldr	r0, [r7, #24]
- 80013ea:	f008 fc1f 	bl	8009c2c <siprintf>
+ 8001356:	4b2b      	ldr	r3, [pc, #172]	; (8001404 <Update_File+0x168>)
+ 8001358:	781b      	ldrb	r3, [r3, #0]
+ 800135a:	461a      	mov	r2, r3
+ 800135c:	687b      	ldr	r3, [r7, #4]
+ 800135e:	492e      	ldr	r1, [pc, #184]	; (8001418 <Update_File+0x17c>)
+ 8001360:	69b8      	ldr	r0, [r7, #24]
+ 8001362:	f008 fc63 	bl	8009c2c <siprintf>
 	    	printf(buf);
- 80013ee:	69b8      	ldr	r0, [r7, #24]
- 80013f0:	f008 fb5c 	bl	8009aac <iprintf>
+ 8001366:	69b8      	ldr	r0, [r7, #24]
+ 8001368:	f008 fba0 	bl	8009aac <iprintf>
 	    	free(buf);
- 80013f4:	69b8      	ldr	r0, [r7, #24]
- 80013f6:	f007 fe45 	bl	8009084 <free>
- 80013fa:	e00f      	b.n	800141c <Update_File+0xf8>
+ 800136c:	69b8      	ldr	r0, [r7, #24]
+ 800136e:	f007 fe89 	bl	8009084 <free>
+ 8001372:	e00f      	b.n	8001394 <Update_File+0xf8>
 	    }
 
 	    else
 	    {
 	    	char *buf = malloc(100*sizeof(char));
- 80013fc:	2064      	movs	r0, #100	; 0x64
- 80013fe:	f007 fe39 	bl	8009074 <malloc>
- 8001402:	4603      	mov	r3, r0
- 8001404:	61fb      	str	r3, [r7, #28]
+ 8001374:	2064      	movs	r0, #100	; 0x64
+ 8001376:	f007 fe7d 	bl	8009074 <malloc>
+ 800137a:	4603      	mov	r3, r0
+ 800137c:	61fb      	str	r3, [r7, #28]
 	    	sprintf (buf, "*%s* UPDATED successfully\n", name);
- 8001406:	687a      	ldr	r2, [r7, #4]
- 8001408:	4926      	ldr	r1, [pc, #152]	; (80014a4 <Update_File+0x180>)
- 800140a:	69f8      	ldr	r0, [r7, #28]
- 800140c:	f008 fc0e 	bl	8009c2c <siprintf>
+ 800137e:	687a      	ldr	r2, [r7, #4]
+ 8001380:	4926      	ldr	r1, [pc, #152]	; (800141c <Update_File+0x180>)
+ 8001382:	69f8      	ldr	r0, [r7, #28]
+ 8001384:	f008 fc52 	bl	8009c2c <siprintf>
 	    	printf(buf);
- 8001410:	69f8      	ldr	r0, [r7, #28]
- 8001412:	f008 fb4b 	bl	8009aac <iprintf>
+ 8001388:	69f8      	ldr	r0, [r7, #28]
+ 800138a:	f008 fb8f 	bl	8009aac <iprintf>
 	    	free(buf);
- 8001416:	69f8      	ldr	r0, [r7, #28]
- 8001418:	f007 fe34 	bl	8009084 <free>
+ 800138e:	69f8      	ldr	r0, [r7, #28]
+ 8001390:	f007 fe78 	bl	8009084 <free>
 	    }
 
 	    /* Close file */
 	    fresult = f_close(&fil);
- 800141c:	481d      	ldr	r0, [pc, #116]	; (8001494 <Update_File+0x170>)
- 800141e:	f007 fb56 	bl	8008ace <f_close>
- 8001422:	4603      	mov	r3, r0
- 8001424:	461a      	mov	r2, r3
- 8001426:	4b19      	ldr	r3, [pc, #100]	; (800148c <Update_File+0x168>)
- 8001428:	701a      	strb	r2, [r3, #0]
+ 8001394:	481d      	ldr	r0, [pc, #116]	; (800140c <Update_File+0x170>)
+ 8001396:	f007 fb9a 	bl	8008ace <f_close>
+ 800139a:	4603      	mov	r3, r0
+ 800139c:	461a      	mov	r2, r3
+ 800139e:	4b19      	ldr	r3, [pc, #100]	; (8001404 <Update_File+0x168>)
+ 80013a0:	701a      	strb	r2, [r3, #0]
 	    if (fresult != FR_OK)
- 800142a:	4b18      	ldr	r3, [pc, #96]	; (800148c <Update_File+0x168>)
- 800142c:	781b      	ldrb	r3, [r3, #0]
- 800142e:	2b00      	cmp	r3, #0
- 8001430:	d013      	beq.n	800145a <Update_File+0x136>
+ 80013a2:	4b18      	ldr	r3, [pc, #96]	; (8001404 <Update_File+0x168>)
+ 80013a4:	781b      	ldrb	r3, [r3, #0]
+ 80013a6:	2b00      	cmp	r3, #0
+ 80013a8:	d013      	beq.n	80013d2 <Update_File+0x136>
 	    {
 	    	char *buf = malloc(100*sizeof(char));
- 8001432:	2064      	movs	r0, #100	; 0x64
- 8001434:	f007 fe1e 	bl	8009074 <malloc>
- 8001438:	4603      	mov	r3, r0
- 800143a:	613b      	str	r3, [r7, #16]
+ 80013aa:	2064      	movs	r0, #100	; 0x64
+ 80013ac:	f007 fe62 	bl	8009074 <malloc>
+ 80013b0:	4603      	mov	r3, r0
+ 80013b2:	613b      	str	r3, [r7, #16]
 	    	sprintf (buf, "ERROR!!! No. %d in closing file *%s*\n", fresult, name);
- 800143c:	4b13      	ldr	r3, [pc, #76]	; (800148c <Update_File+0x168>)
- 800143e:	781b      	ldrb	r3, [r3, #0]
- 8001440:	461a      	mov	r2, r3
- 8001442:	687b      	ldr	r3, [r7, #4]
- 8001444:	4918      	ldr	r1, [pc, #96]	; (80014a8 <Update_File+0x184>)
- 8001446:	6938      	ldr	r0, [r7, #16]
- 8001448:	f008 fbf0 	bl	8009c2c <siprintf>
+ 80013b4:	4b13      	ldr	r3, [pc, #76]	; (8001404 <Update_File+0x168>)
+ 80013b6:	781b      	ldrb	r3, [r3, #0]
+ 80013b8:	461a      	mov	r2, r3
+ 80013ba:	687b      	ldr	r3, [r7, #4]
+ 80013bc:	4918      	ldr	r1, [pc, #96]	; (8001420 <Update_File+0x184>)
+ 80013be:	6938      	ldr	r0, [r7, #16]
+ 80013c0:	f008 fc34 	bl	8009c2c <siprintf>
 	    	printf(buf);
- 800144c:	6938      	ldr	r0, [r7, #16]
- 800144e:	f008 fb2d 	bl	8009aac <iprintf>
+ 80013c4:	6938      	ldr	r0, [r7, #16]
+ 80013c6:	f008 fb71 	bl	8009aac <iprintf>
 	    	free(buf);
- 8001452:	6938      	ldr	r0, [r7, #16]
- 8001454:	f007 fe16 	bl	8009084 <free>
- 8001458:	e00f      	b.n	800147a <Update_File+0x156>
+ 80013ca:	6938      	ldr	r0, [r7, #16]
+ 80013cc:	f007 fe5a 	bl	8009084 <free>
+ 80013d0:	e00f      	b.n	80013f2 <Update_File+0x156>
 	    }
 	    else
 	    {
 	    	char *buf = malloc(100*sizeof(char));
- 800145a:	2064      	movs	r0, #100	; 0x64
- 800145c:	f007 fe0a 	bl	8009074 <malloc>
- 8001460:	4603      	mov	r3, r0
- 8001462:	617b      	str	r3, [r7, #20]
+ 80013d2:	2064      	movs	r0, #100	; 0x64
+ 80013d4:	f007 fe4e 	bl	8009074 <malloc>
+ 80013d8:	4603      	mov	r3, r0
+ 80013da:	617b      	str	r3, [r7, #20]
 	    	sprintf (buf, "File *%s* CLOSED successfully\n", name);
- 8001464:	687a      	ldr	r2, [r7, #4]
- 8001466:	4911      	ldr	r1, [pc, #68]	; (80014ac <Update_File+0x188>)
- 8001468:	6978      	ldr	r0, [r7, #20]
- 800146a:	f008 fbdf 	bl	8009c2c <siprintf>
+ 80013dc:	687a      	ldr	r2, [r7, #4]
+ 80013de:	4911      	ldr	r1, [pc, #68]	; (8001424 <Update_File+0x188>)
+ 80013e0:	6978      	ldr	r0, [r7, #20]
+ 80013e2:	f008 fc23 	bl	8009c2c <siprintf>
 	    	printf(buf);
- 800146e:	6978      	ldr	r0, [r7, #20]
- 8001470:	f008 fb1c 	bl	8009aac <iprintf>
+ 80013e6:	6978      	ldr	r0, [r7, #20]
+ 80013e8:	f008 fb60 	bl	8009aac <iprintf>
 	    	free(buf);
- 8001474:	6978      	ldr	r0, [r7, #20]
- 8001476:	f007 fe05 	bl	8009084 <free>
+ 80013ec:	6978      	ldr	r0, [r7, #20]
+ 80013ee:	f007 fe49 	bl	8009084 <free>
 	     }
 	}
     return fresult;
- 800147a:	4b04      	ldr	r3, [pc, #16]	; (800148c <Update_File+0x168>)
- 800147c:	781b      	ldrb	r3, [r3, #0]
+ 80013f2:	4b04      	ldr	r3, [pc, #16]	; (8001404 <Update_File+0x168>)
+ 80013f4:	781b      	ldrb	r3, [r3, #0]
 }
- 800147e:	4618      	mov	r0, r3
- 8001480:	3720      	adds	r7, #32
- 8001482:	46bd      	mov	sp, r7
- 8001484:	bd80      	pop	{r7, pc}
- 8001486:	bf00      	nop
- 8001488:	2000030c 	.word	0x2000030c
- 800148c:	20000668 	.word	0x20000668
- 8001490:	0800bc64 	.word	0x0800bc64
- 8001494:	20000670 	.word	0x20000670
- 8001498:	0800bc84 	.word	0x0800bc84
- 800149c:	20000660 	.word	0x20000660
- 80014a0:	0800be94 	.word	0x0800be94
- 80014a4:	0800bebc 	.word	0x0800bebc
- 80014a8:	0800bd8c 	.word	0x0800bd8c
- 80014ac:	0800bdb4 	.word	0x0800bdb4
+ 80013f6:	4618      	mov	r0, r3
+ 80013f8:	3720      	adds	r7, #32
+ 80013fa:	46bd      	mov	sp, r7
+ 80013fc:	bd80      	pop	{r7, pc}
+ 80013fe:	bf00      	nop
+ 8001400:	2000030c 	.word	0x2000030c
+ 8001404:	20000668 	.word	0x20000668
+ 8001408:	0800bc64 	.word	0x0800bc64
+ 800140c:	20000670 	.word	0x20000670
+ 8001410:	0800bc84 	.word	0x0800bc84
+ 8001414:	20000660 	.word	0x20000660
+ 8001418:	0800be94 	.word	0x0800be94
+ 800141c:	0800bebc 	.word	0x0800bebc
+ 8001420:	0800bd8c 	.word	0x0800bd8c
+ 8001424:	0800bdb4 	.word	0x0800bdb4
+
+08001428 <ITM_SendChar>:
+           \li Is blocking when a debugger is connected, but the previous character sent has not been transmitted.
+  \param [in]     ch  Character to transmit.
+  \returns            Character to transmit.
+ */
+__STATIC_INLINE uint32_t ITM_SendChar (uint32_t ch)
+{
+ 8001428:	b480      	push	{r7}
+ 800142a:	b083      	sub	sp, #12
+ 800142c:	af00      	add	r7, sp, #0
+ 800142e:	6078      	str	r0, [r7, #4]
+  if (((ITM->TCR & ITM_TCR_ITMENA_Msk) != 0UL) &&      /* ITM enabled */
+ 8001430:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
+ 8001434:	f8d3 3e80 	ldr.w	r3, [r3, #3712]	; 0xe80
+ 8001438:	f003 0301 	and.w	r3, r3, #1
+ 800143c:	2b00      	cmp	r3, #0
+ 800143e:	d013      	beq.n	8001468 <ITM_SendChar+0x40>
+      ((ITM->TER & 1UL               ) != 0UL)   )     /* ITM Port #0 enabled */
+ 8001440:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
+ 8001444:	f8d3 3e00 	ldr.w	r3, [r3, #3584]	; 0xe00
+ 8001448:	f003 0301 	and.w	r3, r3, #1
+  if (((ITM->TCR & ITM_TCR_ITMENA_Msk) != 0UL) &&      /* ITM enabled */
+ 800144c:	2b00      	cmp	r3, #0
+ 800144e:	d00b      	beq.n	8001468 <ITM_SendChar+0x40>
+  {
+    while (ITM->PORT[0U].u32 == 0UL)
+ 8001450:	e000      	b.n	8001454 <ITM_SendChar+0x2c>
+    {
+      __NOP();
+ 8001452:	bf00      	nop
+    while (ITM->PORT[0U].u32 == 0UL)
+ 8001454:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
+ 8001458:	681b      	ldr	r3, [r3, #0]
+ 800145a:	2b00      	cmp	r3, #0
+ 800145c:	d0f9      	beq.n	8001452 <ITM_SendChar+0x2a>
+    }
+    ITM->PORT[0U].u8 = (uint8_t)ch;
+ 800145e:	f04f 4360 	mov.w	r3, #3758096384	; 0xe0000000
+ 8001462:	687a      	ldr	r2, [r7, #4]
+ 8001464:	b2d2      	uxtb	r2, r2
+ 8001466:	701a      	strb	r2, [r3, #0]
+  }
+  return (ch);
+ 8001468:	687b      	ldr	r3, [r7, #4]
+}
+ 800146a:	4618      	mov	r0, r3
+ 800146c:	370c      	adds	r7, #12
+ 800146e:	46bd      	mov	sp, r7
+ 8001470:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001474:	4770      	bx	lr
+
+08001476 <_write>:
+int indx = 0;
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+int _write(int file, char *ptr, int len)
+{
+ 8001476:	b580      	push	{r7, lr}
+ 8001478:	b086      	sub	sp, #24
+ 800147a:	af00      	add	r7, sp, #0
+ 800147c:	60f8      	str	r0, [r7, #12]
+ 800147e:	60b9      	str	r1, [r7, #8]
+ 8001480:	607a      	str	r2, [r7, #4]
+	for(int i=0; i<len; i++)
+ 8001482:	2300      	movs	r3, #0
+ 8001484:	617b      	str	r3, [r7, #20]
+ 8001486:	e009      	b.n	800149c <_write+0x26>
+		ITM_SendChar((*ptr++));
+ 8001488:	68bb      	ldr	r3, [r7, #8]
+ 800148a:	1c5a      	adds	r2, r3, #1
+ 800148c:	60ba      	str	r2, [r7, #8]
+ 800148e:	781b      	ldrb	r3, [r3, #0]
+ 8001490:	4618      	mov	r0, r3
+ 8001492:	f7ff ffc9 	bl	8001428 <ITM_SendChar>
+	for(int i=0; i<len; i++)
+ 8001496:	697b      	ldr	r3, [r7, #20]
+ 8001498:	3301      	adds	r3, #1
+ 800149a:	617b      	str	r3, [r7, #20]
+ 800149c:	697a      	ldr	r2, [r7, #20]
+ 800149e:	687b      	ldr	r3, [r7, #4]
+ 80014a0:	429a      	cmp	r2, r3
+ 80014a2:	dbf1      	blt.n	8001488 <_write+0x12>
+
+	return len;
+ 80014a4:	687b      	ldr	r3, [r7, #4]
+}
+ 80014a6:	4618      	mov	r0, r3
+ 80014a8:	3718      	adds	r7, #24
+ 80014aa:	46bd      	mov	sp, r7
+ 80014ac:	bd80      	pop	{r7, pc}
+	...
 
 080014b0 <main>:
 /**
@@ -2291,20 +2293,19 @@ int main(void)
  800161a:	4613      	mov	r3, r2
  800161c:	4a1b      	ldr	r2, [pc, #108]	; (800168c <main+0x1dc>)
  800161e:	f008 fad1 	bl	8009bc4 <sniprintf>
-	//sprintf(FileName,"DFR_%d-%d-%d_%d-%d-%d.CSV", day, month, year, second, minute, hour);
 
 	Mount_SD("/");
  8001622:	481b      	ldr	r0, [pc, #108]	; (8001690 <main+0x1e0>)
- 8001624:	f7ff fd36 	bl	8001094 <Mount_SD>
+ 8001624:	f7ff fcf2 	bl	800100c <Mount_SD>
 	Format_SD();
- 8001628:	f7ff fd7a 	bl	8001120 <Format_SD>
+ 8001628:	f7ff fd36 	bl	8001098 <Format_SD>
 	Create_File(FileName);
  800162c:	6cfb      	ldr	r3, [r7, #76]	; 0x4c
  800162e:	4618      	mov	r0, r3
- 8001630:	f7ff fddc 	bl	80011ec <Create_File>
+ 8001630:	f7ff fd98 	bl	8001164 <Create_File>
 	Unmount_SD("/");
  8001634:	4816      	ldr	r0, [pc, #88]	; (8001690 <main+0x1e0>)
- 8001636:	f7ff fd51 	bl	80010dc <Unmount_SD>
+ 8001636:	f7ff fd0d 	bl	8001054 <Unmount_SD>
 
 
 
@@ -2778,7 +2779,7 @@ void csvHeader(char* FileName, int lenF) {
 
 	Mount_SD("/");
  8001972:	48cc      	ldr	r0, [pc, #816]	; (8001ca4 <csvHeader+0x394>)
- 8001974:	f7ff fb8e 	bl	8001094 <Mount_SD>
+ 8001974:	f7ff fb4a 	bl	800100c <Mount_SD>
 
 	//CAN Bus
 	sprintf(buffer, "Time, RPM, TPS (%%), Fuel Open Time (ms), Ignition Angle (Degrees),");
@@ -2789,7 +2790,7 @@ void csvHeader(char* FileName, int lenF) {
  8001980:	68bb      	ldr	r3, [r7, #8]
  8001982:	49ca      	ldr	r1, [pc, #808]	; (8001cac <csvHeader+0x39c>)
  8001984:	4618      	mov	r0, r3
- 8001986:	f7ff fccd 	bl	8001324 <Update_File>
+ 8001986:	f7ff fc89 	bl	800129c <Update_File>
 	sprintf(buffer, "Barometer (PSI), MAP (PSI), Pressure Type,");
  800198a:	4bc8      	ldr	r3, [pc, #800]	; (8001cac <csvHeader+0x39c>)
  800198c:	4ac8      	ldr	r2, [pc, #800]	; (8001cb0 <csvHeader+0x3a0>)
@@ -2820,7 +2821,7 @@ void csvHeader(char* FileName, int lenF) {
  80019c0:	68bb      	ldr	r3, [r7, #8]
  80019c2:	49ba      	ldr	r1, [pc, #744]	; (8001cac <csvHeader+0x39c>)
  80019c4:	4618      	mov	r0, r3
- 80019c6:	f7ff fcad 	bl	8001324 <Update_File>
+ 80019c6:	f7ff fc69 	bl	800129c <Update_File>
 	sprintf(buffer, "Pre Radiator Air Temp (C), Post Radiator Air Temp (C),");
  80019ca:	4bb8      	ldr	r3, [pc, #736]	; (8001cac <csvHeader+0x39c>)
  80019cc:	4ab9      	ldr	r2, [pc, #740]	; (8001cb4 <csvHeader+0x3a4>)
@@ -2850,7 +2851,7 @@ void csvHeader(char* FileName, int lenF) {
  80019fe:	68bb      	ldr	r3, [r7, #8]
  8001a00:	49aa      	ldr	r1, [pc, #680]	; (8001cac <csvHeader+0x39c>)
  8001a02:	4618      	mov	r0, r3
- 8001a04:	f7ff fc8e 	bl	8001324 <Update_File>
+ 8001a04:	f7ff fc4a 	bl	800129c <Update_File>
 	sprintf(buffer, "Labmda #1 (A/F R), Lambda #2 (A/F R),");
  8001a08:	4ba8      	ldr	r3, [pc, #672]	; (8001cac <csvHeader+0x39c>)
  8001a0a:	4aab      	ldr	r2, [pc, #684]	; (8001cb8 <csvHeader+0x3a8>)
@@ -2878,7 +2879,7 @@ void csvHeader(char* FileName, int lenF) {
  8001a38:	68bb      	ldr	r3, [r7, #8]
  8001a3a:	499c      	ldr	r1, [pc, #624]	; (8001cac <csvHeader+0x39c>)
  8001a3c:	4618      	mov	r0, r3
- 8001a3e:	f7ff fc71 	bl	8001324 <Update_File>
+ 8001a3e:	f7ff fc2d 	bl	800129c <Update_File>
 	sprintf(buffer, "Pre Radiator Coolant Temp (C), Post Radiator Coolant Temp (C),");
  8001a42:	4b9a      	ldr	r3, [pc, #616]	; (8001cac <csvHeader+0x39c>)
  8001a44:	4a9d      	ldr	r2, [pc, #628]	; (8001cbc <csvHeader+0x3ac>)
@@ -2910,7 +2911,7 @@ void csvHeader(char* FileName, int lenF) {
  8001a7a:	68bb      	ldr	r3, [r7, #8]
  8001a7c:	498b      	ldr	r1, [pc, #556]	; (8001cac <csvHeader+0x39c>)
  8001a7e:	4618      	mov	r0, r3
- 8001a80:	f7ff fc50 	bl	8001324 <Update_File>
+ 8001a80:	f7ff fc0c 	bl	800129c <Update_File>
 	sprintf(buffer, "Oil Pressure (PSI), Mass Air Flow Sensor (kg/s),");
  8001a84:	4b89      	ldr	r3, [pc, #548]	; (8001cac <csvHeader+0x39c>)
  8001a86:	4a8e      	ldr	r2, [pc, #568]	; (8001cc0 <csvHeader+0x3b0>)
@@ -2936,7 +2937,7 @@ void csvHeader(char* FileName, int lenF) {
  8001ab0:	68bb      	ldr	r3, [r7, #8]
  8001ab2:	497e      	ldr	r1, [pc, #504]	; (8001cac <csvHeader+0x39c>)
  8001ab4:	4618      	mov	r0, r3
- 8001ab6:	f7ff fc35 	bl	8001324 <Update_File>
+ 8001ab6:	f7ff fbf1 	bl	800129c <Update_File>
 	sprintf(buffer, "FR Wheel Speed (mph), FL Wheel Speed (mph),");
  8001aba:	4b7c      	ldr	r3, [pc, #496]	; (8001cac <csvHeader+0x39c>)
  8001abc:	4a81      	ldr	r2, [pc, #516]	; (8001cc4 <csvHeader+0x3b4>)
@@ -2964,7 +2965,7 @@ void csvHeader(char* FileName, int lenF) {
  8001aea:	68bb      	ldr	r3, [r7, #8]
  8001aec:	496f      	ldr	r1, [pc, #444]	; (8001cac <csvHeader+0x39c>)
  8001aee:	4618      	mov	r0, r3
- 8001af0:	f7ff fc18 	bl	8001324 <Update_File>
+ 8001af0:	f7ff fbd4 	bl	800129c <Update_File>
 	sprintf(buffer, "RR Wheel Speed (mph), RL Wheel Speed (mph),");
  8001af4:	4b6d      	ldr	r3, [pc, #436]	; (8001cac <csvHeader+0x39c>)
  8001af6:	4a74      	ldr	r2, [pc, #464]	; (8001cc8 <csvHeader+0x3b8>)
@@ -2992,7 +2993,7 @@ void csvHeader(char* FileName, int lenF) {
  8001b24:	68bb      	ldr	r3, [r7, #8]
  8001b26:	4961      	ldr	r1, [pc, #388]	; (8001cac <csvHeader+0x39c>)
  8001b28:	4618      	mov	r0, r3
- 8001b2a:	f7ff fbfb 	bl	8001324 <Update_File>
+ 8001b2a:	f7ff fbb7 	bl	800129c <Update_File>
 	sprintf(buffer, "Battery Voltage (V), Air Temp (C), Coolant Temp (C),");
  8001b2e:	4b5f      	ldr	r3, [pc, #380]	; (8001cac <csvHeader+0x39c>)
  8001b30:	4a66      	ldr	r2, [pc, #408]	; (8001ccc <csvHeader+0x3bc>)
@@ -3020,7 +3021,7 @@ void csvHeader(char* FileName, int lenF) {
  8001b5e:	68bb      	ldr	r3, [r7, #8]
  8001b60:	4952      	ldr	r1, [pc, #328]	; (8001cac <csvHeader+0x39c>)
  8001b62:	4618      	mov	r0, r3
- 8001b64:	f7ff fbde 	bl	8001324 <Update_File>
+ 8001b64:	f7ff fb9a 	bl	800129c <Update_File>
 
 	//GPS
 	sprintf(buffer, "Day, Month, Year, Hour, Minute, Second, gSpeed,");
@@ -3044,7 +3045,7 @@ void csvHeader(char* FileName, int lenF) {
  8001b8c:	68bb      	ldr	r3, [r7, #8]
  8001b8e:	4947      	ldr	r1, [pc, #284]	; (8001cac <csvHeader+0x39c>)
  8001b90:	4618      	mov	r0, r3
- 8001b92:	f7ff fbc7 	bl	8001324 <Update_File>
+ 8001b92:	f7ff fb83 	bl	800129c <Update_File>
 	sprintf(buffer, "Latitude, Longitude, Height Ellipsoid, Height Sea Level,");
  8001b96:	4b45      	ldr	r3, [pc, #276]	; (8001cac <csvHeader+0x39c>)
  8001b98:	4a4e      	ldr	r2, [pc, #312]	; (8001cd4 <csvHeader+0x3c4>)
@@ -3073,7 +3074,7 @@ void csvHeader(char* FileName, int lenF) {
  8001bc8:	68bb      	ldr	r3, [r7, #8]
  8001bca:	4938      	ldr	r1, [pc, #224]	; (8001cac <csvHeader+0x39c>)
  8001bcc:	4618      	mov	r0, r3
- 8001bce:	f7ff fba9 	bl	8001324 <Update_File>
+ 8001bce:	f7ff fb65 	bl	800129c <Update_File>
 
 	//ADC1
 	sprintf(buffer, "FL Damper Sensor, FR Damper Sensor,");
@@ -3101,7 +3102,7 @@ void csvHeader(char* FileName, int lenF) {
  8001bfe:	68bb      	ldr	r3, [r7, #8]
  8001c00:	492a      	ldr	r1, [pc, #168]	; (8001cac <csvHeader+0x39c>)
  8001c02:	4618      	mov	r0, r3
- 8001c04:	f7ff fb8e 	bl	8001324 <Update_File>
+ 8001c04:	f7ff fb4a 	bl	800129c <Update_File>
 	sprintf(buffer, "RL Damper Sensor, RR Damper Sensor,");
  8001c08:	4b28      	ldr	r3, [pc, #160]	; (8001cac <csvHeader+0x39c>)
  8001c0a:	4a34      	ldr	r2, [pc, #208]	; (8001cdc <csvHeader+0x3cc>)
@@ -3127,7 +3128,7 @@ void csvHeader(char* FileName, int lenF) {
  8001c34:	68bb      	ldr	r3, [r7, #8]
  8001c36:	491d      	ldr	r1, [pc, #116]	; (8001cac <csvHeader+0x39c>)
  8001c38:	4618      	mov	r0, r3
- 8001c3a:	f7ff fb73 	bl	8001324 <Update_File>
+ 8001c3a:	f7ff fb2f 	bl	800129c <Update_File>
 
 	//ADC2
 	sprintf(buffer, "Steering Sensor, Brake Sensor #1, Brake Sensor #2,");
@@ -3157,7 +3158,7 @@ void csvHeader(char* FileName, int lenF) {
  8001c6e:	68bb      	ldr	r3, [r7, #8]
  8001c70:	490e      	ldr	r1, [pc, #56]	; (8001cac <csvHeader+0x39c>)
  8001c72:	4618      	mov	r0, r3
- 8001c74:	f7ff fb56 	bl	8001324 <Update_File>
+ 8001c74:	f7ff fb12 	bl	800129c <Update_File>
 
 	//Ask about Unused #1 and #2
 
@@ -3180,12 +3181,12 @@ void csvHeader(char* FileName, int lenF) {
  8001c92:	68bb      	ldr	r3, [r7, #8]
  8001c94:	4905      	ldr	r1, [pc, #20]	; (8001cac <csvHeader+0x39c>)
  8001c96:	4618      	mov	r0, r3
- 8001c98:	f7ff fb44 	bl	8001324 <Update_File>
+ 8001c98:	f7ff fb00 	bl	800129c <Update_File>
 
 
 	Unmount_SD("/");
  8001c9c:	4801      	ldr	r0, [pc, #4]	; (8001ca4 <csvHeader+0x394>)
- 8001c9e:	f7ff fa1d 	bl	80010dc <Unmount_SD>
+ 8001c9e:	f7ff f9d9 	bl	8001054 <Unmount_SD>
  8001ca2:	e021      	b.n	8001ce8 <csvHeader+0x3d8>
  8001ca4:	0800bfc8 	.word	0x0800bfc8
  8001ca8:	0800bfdc 	.word	0x0800bfdc
@@ -3258,7 +3259,7 @@ void csvUpdate(char* FileName, int lenF) {
 
 	Mount_SD("/");
  8001d56:	4896      	ldr	r0, [pc, #600]	; (8001fb0 <csvUpdate+0x2bc>)
- 8001d58:	f7ff f99c 	bl	8001094 <Mount_SD>
+ 8001d58:	f7ff f958 	bl	800100c <Mount_SD>
 
 
 
@@ -3287,7 +3288,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001d92:	69bb      	ldr	r3, [r7, #24]
  8001d94:	498d      	ldr	r1, [pc, #564]	; (8001fcc <csvUpdate+0x2d8>)
  8001d96:	4618      	mov	r0, r3
- 8001d98:	f7ff fac4 	bl	8001324 <Update_File>
+ 8001d98:	f7ff fa80 	bl	800129c <Update_File>
 	sprintf(buffer, "%f,%f,%i,", barometer, MAP, pressureType);
  8001d9c:	4b8c      	ldr	r3, [pc, #560]	; (8001fd0 <csvUpdate+0x2dc>)
  8001d9e:	e9d3 1200 	ldrd	r1, r2, [r3]
@@ -3306,7 +3307,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001dbe:	69bb      	ldr	r3, [r7, #24]
  8001dc0:	4982      	ldr	r1, [pc, #520]	; (8001fcc <csvUpdate+0x2d8>)
  8001dc2:	4618      	mov	r0, r3
- 8001dc4:	f7ff faae 	bl	8001324 <Update_File>
+ 8001dc4:	f7ff fa6a 	bl	800129c <Update_File>
 	sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f,", AnIn1, AnIn2, AnIn3, AnIn4, AnIn5, AnIn6, AnIn7, AnIn8);
  8001dc8:	4b85      	ldr	r3, [pc, #532]	; (8001fe0 <csvUpdate+0x2ec>)
  8001dca:	ed93 7b00 	vldr	d7, [r3]
@@ -3340,7 +3341,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001e24:	69bb      	ldr	r3, [r7, #24]
  8001e26:	4969      	ldr	r1, [pc, #420]	; (8001fcc <csvUpdate+0x2d8>)
  8001e28:	4618      	mov	r0, r3
- 8001e2a:	f7ff fa7b 	bl	8001324 <Update_File>
+ 8001e2a:	f7ff fa37 	bl	800129c <Update_File>
 	sprintf(buffer, "%f,%f,%f,%f,%f,", freq1, freq2, freq3, freq4, batteryVoltage);
  8001e2e:	4b75      	ldr	r3, [pc, #468]	; (8002004 <csvUpdate+0x310>)
  8001e30:	e9d3 ab00 	ldrd	sl, fp, [r3]
@@ -3365,7 +3366,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001e68:	69bb      	ldr	r3, [r7, #24]
  8001e6a:	4958      	ldr	r1, [pc, #352]	; (8001fcc <csvUpdate+0x2d8>)
  8001e6c:	4618      	mov	r0, r3
- 8001e6e:	f7ff fa59 	bl	8001324 <Update_File>
+ 8001e6e:	f7ff fa15 	bl	800129c <Update_File>
 	sprintf(buffer, "%f,%f,", airTemp, coolantTemp);
  8001e72:	4b6a      	ldr	r3, [pc, #424]	; (800201c <csvUpdate+0x328>)
  8001e74:	e9d3 1200 	ldrd	r1, r2, [r3]
@@ -3381,7 +3382,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001e8e:	69bb      	ldr	r3, [r7, #24]
  8001e90:	494e      	ldr	r1, [pc, #312]	; (8001fcc <csvUpdate+0x2d8>)
  8001e92:	4618      	mov	r0, r3
- 8001e94:	f7ff fa46 	bl	8001324 <Update_File>
+ 8001e94:	f7ff fa02 	bl	800129c <Update_File>
 
 	sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,", day, month, year, hour, minute, second, gSpeed);
  8001e98:	4b63      	ldr	r3, [pc, #396]	; (8002028 <csvUpdate+0x334>)
@@ -3412,7 +3413,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001eca:	69bb      	ldr	r3, [r7, #24]
  8001ecc:	493f      	ldr	r1, [pc, #252]	; (8001fcc <csvUpdate+0x2d8>)
  8001ece:	4618      	mov	r0, r3
- 8001ed0:	f7ff fa28 	bl	8001324 <Update_File>
+ 8001ed0:	f7ff f9e4 	bl	800129c <Update_File>
 	sprintf(buffer, "%f,%f,%f,%f,", latitude, longitude, height_Ellipsoid, height_SeaLvl);
  8001ed4:	4b5c      	ldr	r3, [pc, #368]	; (8002048 <csvUpdate+0x354>)
  8001ed6:	681b      	ldr	r3, [r3, #0]
@@ -3450,7 +3451,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001f24:	69bb      	ldr	r3, [r7, #24]
  8001f26:	4929      	ldr	r1, [pc, #164]	; (8001fcc <csvUpdate+0x2d8>)
  8001f28:	4618      	mov	r0, r3
- 8001f2a:	f7ff f9fb 	bl	8001324 <Update_File>
+ 8001f2a:	f7ff f9b7 	bl	800129c <Update_File>
 
 	sprintf(buffer, "%d,%d,%d,%d,", damperT_Sense_FL, damperT_Sense_FR, damperT_Sense_RL, damperT_Sense_RR);
  8001f2e:	4b4b      	ldr	r3, [pc, #300]	; (800205c <csvUpdate+0x368>)
@@ -3472,7 +3473,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001f4e:	69bb      	ldr	r3, [r7, #24]
  8001f50:	491e      	ldr	r1, [pc, #120]	; (8001fcc <csvUpdate+0x2d8>)
  8001f52:	4618      	mov	r0, r3
- 8001f54:	f7ff f9e6 	bl	8001324 <Update_File>
+ 8001f54:	f7ff f9a2 	bl	800129c <Update_File>
 
 	sprintf(buffer, "%d,%d,%d,", steeringA_Sense, brakeP_Sense1, brakeP_Sense2);
  8001f58:	4b45      	ldr	r3, [pc, #276]	; (8002070 <csvUpdate+0x37c>)
@@ -3490,7 +3491,7 @@ void csvUpdate(char* FileName, int lenF) {
  8001f70:	69bb      	ldr	r3, [r7, #24]
  8001f72:	4916      	ldr	r1, [pc, #88]	; (8001fcc <csvUpdate+0x2d8>)
  8001f74:	4618      	mov	r0, r3
- 8001f76:	f7ff f9d5 	bl	8001324 <Update_File>
+ 8001f76:	f7ff f991 	bl	800129c <Update_File>
 
 	sprintf(buffer, "%f,%f,%f,%f,%f,%f", x_LS, y_LS, z_LS, roll_LS, pitch_LS, yaw_LS);
  8001f7a:	4b41      	ldr	r3, [pc, #260]	; (8002080 <csvUpdate+0x38c>)
@@ -3578,7 +3579,7 @@ void csvUpdate(char* FileName, int lenF) {
  80020ac:	69bb      	ldr	r3, [r7, #24]
  80020ae:	490d      	ldr	r1, [pc, #52]	; (80020e4 <csvUpdate+0x3f0>)
  80020b0:	4618      	mov	r0, r3
- 80020b2:	f7ff f937 	bl	8001324 <Update_File>
+ 80020b2:	f7ff f8f3 	bl	800129c <Update_File>
 
 	sprintf(buffer, "\n\n");
  80020b6:	4b0b      	ldr	r3, [pc, #44]	; (80020e4 <csvUpdate+0x3f0>)
@@ -3591,13 +3592,13 @@ void csvUpdate(char* FileName, int lenF) {
  80020c2:	69bb      	ldr	r3, [r7, #24]
  80020c4:	4907      	ldr	r1, [pc, #28]	; (80020e4 <csvUpdate+0x3f0>)
  80020c6:	4618      	mov	r0, r3
- 80020c8:	f7ff f92c 	bl	8001324 <Update_File>
+ 80020c8:	f7ff f8e8 	bl	800129c <Update_File>
 
 
 
 	Unmount_SD("/");
  80020cc:	4807      	ldr	r0, [pc, #28]	; (80020ec <csvUpdate+0x3f8>)
- 80020ce:	f7ff f805 	bl	80010dc <Unmount_SD>
+ 80020ce:	f7fe ffc1 	bl	8001054 <Unmount_SD>
  80020d2:	f8d7 d00c 	ldr.w	sp, [r7, #12]
 }
  80020d6:	bf00      	nop
@@ -26758,7 +26759,7 @@ uint8_t FATFS_LinkDriver(const Diskio_drvTypeDef *drv, char *path)
  800ba02:	2200      	movs	r2, #0
  800ba04:	6022      	str	r2, [r4, #0]
  800ba06:	461a      	mov	r2, r3
- 800ba08:	f7f5 fb27 	bl	800105a <_write>
+ 800ba08:	f7f5 fd35 	bl	8001476 <_write>
  800ba0c:	1c43      	adds	r3, r0, #1
  800ba0e:	d102      	bne.n	800ba16 <_write_r+0x1e>
  800ba10:	6823      	ldr	r3, [r4, #0]
