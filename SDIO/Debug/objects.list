@@ -1,3 +1,4 @@
+"Core/Src/FATFSLFNRequired.o"
 "Core/Src/File_Handling.o"
 "Core/Src/main.o"
 "Core/Src/stm32f4xx_hal_msp.o"
@@ -27,7 +28,6 @@
 "FATFS/App/fatfs.o"
 "FATFS/Target/bsp_driver_sd.o"
 "FATFS/Target/sd_diskio.o"
-"Middlewares/Third_Party/FatFs/src/FATFSLFNRequired.o"
 "Middlewares/Third_Party/FatFs/src/diskio.o"
 "Middlewares/Third_Party/FatFs/src/ff.o"
 "Middlewares/Third_Party/FatFs/src/ff_gen_drv.o"

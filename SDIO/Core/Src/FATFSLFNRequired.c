@@ -1,7 +1,7 @@
 //This file was modified for stm32 compatability and found in the following web page:
 //https://e2e.ti.com/support/legacy_forums/embedded/tirtos/f/ti-rtos-forum-read-only-archived/212914/fatfs-and-long-file-name
 
-#include "ff.h"
+#include "FATFSLFNRequired.h"
 #define _TINY_TABLE	1
 
 static const WCHAR uni2sjis[] = {

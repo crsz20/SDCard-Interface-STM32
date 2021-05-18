@@ -1,8 +1,9 @@
-Middlewares/Third_Party/FatFs/src/FATFSLFNRequired.o: \
- ../Middlewares/Third_Party/FatFs/src/FATFSLFNRequired.c \
- ../Middlewares/Third_Party/FatFs/src/ff.h \
- ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
- ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+Core/Src/FATFSLFNRequired.o: ../Core/Src/FATFSLFNRequired.c \
+ ../Core/Inc/FATFSLFNRequired.h \
+ ../Core/Inc/../../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Core/Inc/../../Middlewares/Third_Party/FatFs/src/integer.h \
+ ../FATFS/Target/ffconf.h ../Core/Inc/main.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -32,9 +33,11 @@ Middlewares/Third_Party/FatFs/src/FATFSLFNRequired.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../FATFS/Target/bsp_driver_sd.h
 
-../Middlewares/Third_Party/FatFs/src/ff.h:
+../Core/Inc/FATFSLFNRequired.h:
 
-../Middlewares/Third_Party/FatFs/src/integer.h:
+../Core/Inc/../../Middlewares/Third_Party/FatFs/src/ff.h:
+
+../Core/Inc/../../Middlewares/Third_Party/FatFs/src/integer.h:
 
 ../FATFS/Target/ffconf.h:
 
