@@ -29,9 +29,10 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 * PC8 ---> DAT0
 * PC9 ---> DAT1
 * PC10 --> DAT2
-* PC11 --> CD / DAT3
+* PC11 --> DAT3
 * PC12 --> CLK
 * PD2 ---> CMD
+* PB6 ---> CD (Card Detection)
 ***
 
 ## Expected Input
