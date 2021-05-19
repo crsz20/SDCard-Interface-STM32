@@ -187,8 +187,12 @@ void CAN1_TX(void);
 //void testDisplay();
 void csvHeader(char* FileName, int lenF);
 void csvUpdate(char* FileName, int lenF);
+void SD_Check(FRESULT fresult);
+int SD_Status();
 
 // SD Card
+FRESULT fresult;
+short int isSaving = 0;
 char buffer[100];
 int indx = 0;
 /* USER CODE END PFP */
@@ -264,9 +268,11 @@ int main(void)
 	char FileName[lenF];
 	snprintf(FileName,lenF,"DFR_%s-%s-%s_%s-%s-%s.CSV", dayS, monthS, yearS, secondS, minuteS, hourS);
 
-	Mount_SD("/");
+	fresult = Mount_SD("/");
+	SD_Check(fresult);
 	Format_SD();
-	Create_File(FileName);
+	fresult = Create_File(FileName);
+	SD_Check(fresult);
 	Unmount_SD("/");
 
 
@@ -415,12 +421,29 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+
+void SD_Check(FRESULT fresult) {
+	if(fresult != FR_OK) {
+		isSaving = 0;
+		if(enablePrintf)
+			printf("ERROR - SD card is NOT saving!\n");
+	}
+	else {
+		isSaving = 1;
+		if(enablePrintf)
+			printf("Successfully saved to SD Card\n");
+	}
+}
+
+int SD_Status() { return isSaving; }
+
 void csvHeader(char* FileName, int lenF) {
 
 	char name[lenF];
 	strcpy(name, FileName);
 
-	Mount_SD("/");
+	fresult = Mount_SD("/");
+	SD_Check(fresult);
 
 	//CAN Bus
 	sprintf(buffer, "Time, RPM, TPS (%%), Fuel Open Time (ms), Ignition Angle (Degrees),");
@@ -462,7 +485,8 @@ void csvHeader(char* FileName, int lenF) {
 
 	//Accelerometer & Gyroscope
 	sprintf(buffer, "X, Y, Z, Roll, Pitch, Yaw\n\n");
-	Update_File(name, buffer);
+	fresult = Update_File(name, buffer);
+	SD_Check(fresult);
 
 
 	Unmount_SD("/");
@@ -473,8 +497,8 @@ void csvUpdate(char* FileName, int lenF) {
 	char name[lenF];
 	strcpy(name, FileName);
 
-	Mount_SD("/");
-
+	fresult = Mount_SD("/");
+	SD_Check(fresult);
 
 
 	sprintf(buffer, "%d,%hu,%f,%f,%f,", indx, RPM, TPS, fuelOpenTime, ignitionAngle);
@@ -503,8 +527,8 @@ void csvUpdate(char* FileName, int lenF) {
 	Update_File(name, buffer);
 
 	sprintf(buffer, "\n\n");
-	Update_File(name, buffer);
-
+	fresult = Update_File(name, buffer);
+	SD_Check(fresult);
 
 
 	Unmount_SD("/");

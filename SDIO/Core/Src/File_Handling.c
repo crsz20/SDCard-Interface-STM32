@@ -32,13 +32,15 @@ uint32_t total, free_space;
 const short sdioPrints = 1;
 
 
-void Mount_SD (const TCHAR* path)
+FRESULT Mount_SD (const TCHAR* path)
 {
 	fresult = f_mount(&fs, path, 1);
 	if (fresult != FR_OK) {
 		if(sdioPrints) printf("ERROR!!! in mounting SD CARD...\n");
 	}
 	else if(sdioPrints) printf("SD CARD mounted successfully...\n");
+
+	return fresult;
 }
 
 void Unmount_SD (const TCHAR* path)

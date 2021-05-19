@@ -15,7 +15,7 @@
 
 
 /* mounts the sd card*/
-void Mount_SD (const TCHAR* path);
+FRESULT Mount_SD (const TCHAR* path);
 
 /* unmounts the sd card*/
 void Unmount_SD (const TCHAR* path);
