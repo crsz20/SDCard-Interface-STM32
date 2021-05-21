@@ -193,11 +193,22 @@ int SD_Status();
 // SD Card
 FRESULT fresult;
 short int isSaving = 0;
+short int detect = 0;
 char buffer[100];
 int indx = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_6)
+    {
+    	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
+    }
+}
+
 int _write(int file, char *ptr, int len)
 {
 	for(int i=0; i<len; i++)
@@ -205,10 +216,6 @@ int _write(int file, char *ptr, int len)
 
 	return len;
 }
-
-/* USER CODE BEGIN 0 */
-
-
 
 /* USER CODE END 0 */
 
@@ -249,6 +256,19 @@ int main(void)
     MX_SDIO_SD_Init();
     MX_FATFS_Init();
     /* USER CODE BEGIN 2 */
+
+    //Check if the card is already inserted or not
+    if(Mount_SD("/")==FR_OK) {
+		detect = 1;
+		printf("%d) Card is already detected\n\n",detect);
+	}
+	else {
+		detect = 0;
+		printf("%d) No card detected\n\n",detect);
+	}
+
+	Unmount_SD("/");
+
 
     //Create new file with a GPS naming convention
 	second = 53;
@@ -292,7 +312,6 @@ int main(void)
 		indx++;
 		printf("\n Count: %d \n", indx);
 
-		HAL_Delay(2000);
 	}
   /* USER CODE END 3 */
 }
@@ -416,6 +435,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

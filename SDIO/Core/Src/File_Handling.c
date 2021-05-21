@@ -29,7 +29,7 @@ uint32_t total, free_space;
 
 
 //Debugging
-const short sdioPrints = 1;
+const short sdioPrints = 0;
 
 
 FRESULT Mount_SD (const TCHAR* path)
