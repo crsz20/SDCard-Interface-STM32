@@ -194,6 +194,9 @@ int SD_Status();
 FRESULT fresult;
 short int isSaving = 0;
 short int detect = 0;
+short int previousDetect = 0;
+char* FileName;
+int lenF = 0;
 char buffer[100];
 int indx = 0;
 /* USER CODE END PFP */
@@ -262,34 +265,12 @@ int main(void)
 	Unmount_SD("/");
 
 
-    //Create new file with a GPS naming convention
-	second = 53;
-	minute = 33;
-	hour = 14;
-	day = 24;
-	month = 3;
-	year = 2021;
-	char dayS[12], monthS[12], yearS[12], hourS[12], minuteS[12], secondS[12];
-	sprintf(dayS, "%d", day);
-	sprintf(monthS, "%d", month);
-	sprintf(yearS, "%d", year);
-	sprintf(hourS, "%d", hour);
-	sprintf(minuteS, "%d", minute);
-	sprintf(secondS, "%d", second);
-	int lenF = strlen("DFR_")+strlen(dayS)+strlen("-")+strlen(monthS)+strlen("-")+strlen(yearS)+strlen("_")+strlen(secondS)+strlen("-")+strlen(minuteS)+strlen("-")+strlen(hourS)+strlen(".csv")+1;
-	char FileName[lenF];
-	snprintf(FileName,lenF,"DFR_%s-%s-%s_%s-%s-%s.CSV", dayS, monthS, yearS, secondS, minuteS, hourS);
-
-	fresult = Mount_SD("/");
-	SD_Check(fresult);
-	Format_SD();
-	fresult = Create_File(FileName);
-	SD_Check(fresult);
-	Unmount_SD("/");
 
 
 
-	csvHeader(FileName, lenF);
+
+
+
 
   /* USER CODE END 2 */
 
@@ -303,19 +284,64 @@ int main(void)
 		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)) {
 			fresult = Mount_SD("/");
 			if (fresult == FR_OK) {
+
+				detect = 1;
+				if ((previousDetect == 0 && detect == 1)) {
+					printf("Creating a new file...\n");
+
+					//Create new file with a GPS naming convention
+					second = 53;
+					minute = 33;
+					hour = 14;
+					day = 24;
+					month = 3;
+					year = 2021;
+					char dayS[12], monthS[12], yearS[12], hourS[12], minuteS[12], secondS[12];
+					sprintf(dayS, "%d", indx);
+					sprintf(monthS, "%d", month);
+					sprintf(yearS, "%d", year);
+					sprintf(hourS, "%d", hour);
+					sprintf(minuteS, "%d", minute);
+					sprintf(secondS, "%d", second);
+					lenF = strlen("DFR_")+strlen(dayS)+strlen("-")+strlen(monthS)+strlen("-")+strlen(yearS)+strlen("_")+strlen(secondS)+strlen("-")+strlen(minuteS)+strlen("-")+strlen(hourS)+strlen(".csv")+1;
+					FileName = (char*)malloc(lenF * sizeof(char));
+					snprintf(FileName,lenF,"DFR_%s-%s-%s_%s-%s-%s.CSV", dayS, monthS, yearS, secondS, minuteS, hourS);
+
+
+					SD_Check(fresult);
+					Format_SD();
+					fresult = Create_File(FileName);
+					SD_Check(fresult);
+					Unmount_SD("/");
+
+					csvHeader(FileName, lenF);
+
+					previousDetect = detect;
+
+				}
+
+
+
 				HAL_GPIO_WritePin(GPIOA, LD2_Pin, 1);
 				csvUpdate(FileName, lenF);
 				indx++;
 				printf("\n Count: %d \n", indx);
+
 			}
 			else {
+				detect = 0;
 				HAL_GPIO_WritePin(GPIOA, LD2_Pin, 0);
 				printf("ERROR - Not mounded...\n");
+
+				previousDetect = detect;
 			}
 		}
 		else {
+			detect = 0;
 			HAL_GPIO_WritePin(GPIOA, LD2_Pin, 0);
 			printf("ERROR - No card inserted...\n");
+
+			previousDetect = detect;
 		}
 
 
