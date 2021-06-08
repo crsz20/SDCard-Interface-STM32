@@ -8,4 +8,4 @@ File_Handling.c:257:9:Create_File	40	static
 File_Handling.c:306:9:Update_File	40	static
 File_Handling.c:370:9:Remove_File	32	static
 File_Handling.c:405:9:Create_Dir	24	static
-File_Handling.c:425:6:Check_SD_Space	24	static
+File_Handling.c:425:6:Check_SD_Space	16	static

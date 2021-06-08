@@ -36,9 +36,10 @@ stm32f4xx_ll_sdmmc.c:1035:10:SDMMC_CmdSendStatus	40	static
 stm32f4xx_ll_sdmmc.c:1058:10:SDMMC_CmdStatusRegister	40	static
 stm32f4xx_ll_sdmmc.c:1083:10:SDMMC_CmdOpCondition	40	static
 stm32f4xx_ll_sdmmc.c:1107:10:SDMMC_CmdSwitch	40	static
-stm32f4xx_ll_sdmmc.c:1141:17:SDMMC_GetCmdError	16	static
+stm32f4xx_ll_sdmmc.c:1141:17:SDMMC_GetCmdError	24	static
 stm32f4xx_ll_sdmmc.c:1168:17:SDMMC_GetCmdResp1	40	static
 stm32f4xx_ll_sdmmc.c:1303:17:SDMMC_GetCmdResp2	24	static
 stm32f4xx_ll_sdmmc.c:1347:17:SDMMC_GetCmdResp3	24	static
 stm32f4xx_ll_sdmmc.c:1387:17:SDMMC_GetCmdResp6	40	static
 stm32f4xx_ll_sdmmc.c:1460:17:SDMMC_GetCmdResp7	24	static
+stm32f4xx_ll_sdmmc.c:1512:10:SDMMC_CmdSendEXTCSD	40	static

@@ -6,7 +6,7 @@ stm32f4xx_hal_rcc_ex.c:2805:19:HAL_RCCEx_EnablePLLI2S	24	static
 stm32f4xx_hal_rcc_ex.c:2888:19:HAL_RCCEx_DisablePLLI2S	16	static
 stm32f4xx_hal_rcc_ex.c:2918:19:HAL_RCCEx_EnablePLLSAI	24	static
 stm32f4xx_hal_rcc_ex.c:2992:19:HAL_RCCEx_DisablePLLSAI	16	static
-stm32f4xx_hal_rcc_ex.c:3053:10:HAL_RCC_GetSysClockFreq	48	static
+stm32f4xx_hal_rcc_ex.c:3053:10:HAL_RCC_GetSysClockFreq	64	static
 stm32f4xx_hal_rcc_ex.c:3145:19:HAL_RCC_DeInit	16	static
 stm32f4xx_hal_rcc_ex.c:3335:19:HAL_RCC_OscConfig	32	static
-stm32f4xx_hal_rcc_ex.c:3672:6:HAL_RCC_GetOscConfig	16	static
+stm32f4xx_hal_rcc_ex.c:3705:6:HAL_RCC_GetOscConfig	16	static
