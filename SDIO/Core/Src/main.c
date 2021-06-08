@@ -300,9 +300,24 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		csvUpdate(FileName, lenF);
-		indx++;
-		printf("\n Count: %d \n", indx);
+		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)) {
+			fresult = Mount_SD("/");
+			if (fresult == FR_OK) {
+				HAL_GPIO_WritePin(GPIOA, LD2_Pin, 1);
+				csvUpdate(FileName, lenF);
+				indx++;
+				printf("\n Count: %d \n", indx);
+			}
+			else {
+				HAL_GPIO_WritePin(GPIOA, LD2_Pin, 0);
+				printf("ERROR - Not mounded...\n");
+			}
+		}
+		else {
+			HAL_GPIO_WritePin(GPIOA, LD2_Pin, 0);
+			printf("ERROR - No card inserted...\n");
+		}
+
 
 	}
   /* USER CODE END 3 */
