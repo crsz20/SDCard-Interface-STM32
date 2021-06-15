@@ -4,8 +4,8 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 ## Objective:
 - [x] Implement SDIO communications
 - [x] Interface the micro-SD card with the MCU for storage capabilities.
-- [ ] Provide LED light indication for card detection and file completion
-- [ ] Condense the program to a callable function
+- [x] Provide LED light indication for card detection
+- [x] Condense the program to a callable function
 - [x] Store the output as a CSV file
 - [ ] Build a report generator with Excel and/or MatLab, or use DFR's DataAnalyzer
 
