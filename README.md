@@ -33,6 +33,9 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 * PC12 --> CLK
 * PD2 ---> CMD
 * PB6 ---> CD (Card Detection)
+
+### Note
+In order to enable the GPS-based file naming, set the macro `_USE_LFN` to 2. This enables the Long File Naming Convention, and must be done everytime you make changes to the .ioc file and allow code generation.
 ***
 
 ## Expected Input
