@@ -1,5 +1,5 @@
 # SDCard-Interface-STM32
-An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard. A project for UTD's Dallas Formula Racing.
+An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard. A Data Logger for UTD's Dallas Formula Racing.
 ***
 ## Objective:
 - [x] Implement SDIO communications
@@ -13,8 +13,8 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 ## Technologies:
 * General Purpose I/O (GPIO)
 * 4-bit SDIO communication protocol
-* HAL Drivers
-* [File Handling Library by Controllers Tech](https://controllerstech.com/interface-sd-card-with-sdio-in-stm32/)
+* [File Handling Library by Controllers Tech](https://controllerstech.com/interface-sd-card-with-sdio-in-stm32/) (Modified)
+* HAL drivers & [FAT FS](http://elm-chan.org/fsw/ff/00index_e.html)
 
 ## Hardware and Equipment:
 
