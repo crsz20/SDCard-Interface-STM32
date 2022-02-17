@@ -1,5 +1,10 @@
 # SDCard-Interface-STM32
 An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing data from sensors of the race car's dashboard. A Data Logger for UTD's Dallas Formula Racing.
+
+<p align="center">
+  <img width="640" height="320" src="https://github.com/crsz20/SDCard-Interface-STM32/blob/master/images/Title_SDIO%20Card%20Interface.png">
+</p>
+
 ***
 ## Objective:
 - [x] Implement SDIO communications
@@ -7,6 +12,7 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 - [x] Provide LED light indication for card detection
 - [x] Condense the program to a callable function
 - [x] Store the output as a CSV file
+- [ ] Improve modularity for a re-usable interface
 - [ ] Build a report generator with Excel and/or MatLab, or use DFR's DataAnalyzer
 
 
