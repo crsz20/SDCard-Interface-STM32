@@ -12,7 +12,7 @@ An interface between the STM32 NUCLEO F446RE and a micro-SD card for storing dat
 - [x] Provide LED light indication for card detection
 - [x] Condense the program to a callable function
 - [x] Store the output as a CSV file
-- [ ] Improve modularity for a re-usable interface
+- [ ] Improve modularity for a swappable interface
 - [ ] Build a report generator with Excel and/or MatLab, or use DFR's DataAnalyzer
 
 
